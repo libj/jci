@@ -29,11 +29,11 @@ import java.util.LinkedHashSet;
 
 import org.lib4j.exec.Processes;
 import org.lib4j.io.Files;
-import org.safris.commons.lang.Resources;
-import org.safris.commons.util.Collections;
-import org.safris.commons.util.jar.Jar;
-import org.safris.commons.util.zip.CachedFile;
-import org.safris.commons.util.zip.Zips;
+import org.lib4j.lang.Resources;
+import org.lib4j.util.Collections;
+import org.lib4j.util.jar.Jar;
+import org.lib4j.util.zip.CachedFile;
+import org.lib4j.util.zip.Zips;
 
 public final class JavaCompiler {
   public static final FileFilter JAVA_FILE_FILTER = new FileFilter() {
