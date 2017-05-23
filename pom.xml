@@ -31,10 +31,27 @@
   <description>
     Java Compiler Interface.
   </description>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.lib4j</groupId>
       <artifactId>lib4j-exec</artifactId>
     </dependency>
   </dependencies>
+  <repositories>
+    <repository>
+      <id>mvn.repo.lib4j.org</id>
+      <url>http://mvn.repo.lib4j.org/m2</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>mvn.repo.lib4j.org</id>
+      <url>http://mvn.repo.lib4j.org/m2</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>
