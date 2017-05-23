@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.safris.commons.jci;
+package org.lib4j.jci;
 
 public class CompilationException extends Exception {
   private static final long serialVersionUID = -7384036082398812166L;

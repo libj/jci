@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.safris.commons.jci;
+package org.lib4j.jci;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

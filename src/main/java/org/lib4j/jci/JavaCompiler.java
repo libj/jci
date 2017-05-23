@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.safris.commons.jci;
+package org.lib4j.jci;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -27,8 +27,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
-import org.safris.commons.exec.Processes;
-import org.safris.commons.io.Files;
+import org.lib4j.exec.Processes;
+import org.lib4j.io.Files;
 import org.safris.commons.lang.Resources;
 import org.safris.commons.util.Collections;
 import org.safris.commons.util.jar.Jar;
