@@ -48,7 +48,7 @@ public final class JavaCompiler {
   private final Jar destJar;
 
   public JavaCompiler(final File destDir, final File ... classpath) {
-    this(destDir, Collections.asCollection(LinkedHashSet.class, classpath));
+    this(destDir, Collections.asCollection(new LinkedHashSet<File>(), classpath));
   }
 
   public JavaCompiler(final File destDir, final Collection<File> classpath) {
@@ -64,7 +64,7 @@ public final class JavaCompiler {
   }
 
   public JavaCompiler(final Jar destJar, final File ... classpath) {
-    this(destJar, Collections.asCollection(LinkedHashSet.class, classpath));
+    this(destJar, Collections.asCollection(new LinkedHashSet<File>(), classpath));
   }
 
   public JavaCompiler(final Jar destJar, final Collection<File> classpath) {
@@ -80,7 +80,7 @@ public final class JavaCompiler {
   }
 
   public void compile(final File ... files) throws CompilationException, IOException {
-    compile(Collections.asCollection(ArrayList.class, files));
+    compile(Collections.asCollection(new ArrayList<File>(), files));
   }
 
   public void compile(final Collection<File> files) throws CompilationException, IOException {
