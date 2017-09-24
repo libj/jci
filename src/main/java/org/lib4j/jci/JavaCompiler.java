@@ -155,6 +155,8 @@ public final class JavaCompiler {
     final File tempFile = File.createTempFile("javac", ".tmp");
     try (final FileWriter out = new FileWriter(tempFile)) {
       out.write("-Xlint:none\n");
+      // FIXME: Used as a stop-gap solution to get JUnit in Eclipse to load classes compiled by this class (Java 9).
+      out.write("--release 8\n");
       out.write("-cp \"" + classpath + "\"\n");
       out.write("-d \"" + convertSlashes(destDir.getAbsolutePath()) + "\"");
       final Iterator<File> iterator = javaSources.iterator();
