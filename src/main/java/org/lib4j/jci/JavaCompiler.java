@@ -93,10 +93,13 @@ public final class JavaCompiler {
     final LinkedHashSet<File> javaSources = new LinkedHashSet<File>();
     for (final File file : files) {
       if (file.isDirectory())
-        javaSources.addAll(Files.listAll(destDir, JAVA_FILE_FILTER));
+        javaSources.addAll(Files.listAll(file, JAVA_FILE_FILTER));
       else
         javaSources.add(file);
     }
+
+    if (javaSources.size() == 0)
+      throw new IllegalArgumentException("no source files: " + Collections.toString(files, ", "));
 
     if (destDir != null)
       toDir(destDir, javaSources);
@@ -141,27 +144,32 @@ public final class JavaCompiler {
     if (!destDir.exists() && !destDir.mkdirs())
       throw new IllegalArgumentException("Could not create directory " + destDir);
 
-    String classpath = "";
+    final StringBuilder classpath = new StringBuilder();
+    final File locationBase = Resources.getLocationBase(JavaCompiler.class);
+    if (locationBase != null)
+      classpath.append(File.pathSeparatorChar).append(convertSlashes(locationBase.getAbsolutePath()));
+
     if (classpathFiles != null)
       for (final File classpathFile : classpathFiles)
         if (classpathFile != null)
-          classpath += classpathFile + File.pathSeparator;
+          classpath.append(File.pathSeparatorChar).append(classpathFile);
 
-    classpath += System.getProperty("java.class.path");
-    final File locationBase = Resources.getLocationBase(JavaCompiler.class);
-    if (locationBase != null)
-      classpath = convertSlashes(locationBase.getAbsolutePath()) + File.pathSeparator + classpath;
+    final String javaClassPath = System.getProperty("java.class.path");
+    if (javaClassPath != null && javaClassPath.length() > 0)
+      classpath.append(File.pathSeparatorChar).append(javaClassPath);
 
     final File tempFile = File.createTempFile("javac", ".tmp");
-    try (final FileWriter out = new FileWriter(tempFile)) {
-      out.write("-Xlint:none\n");
+    try (final FileWriter writer = new FileWriter(tempFile)) {
+      writer.write("-Xlint:none\n");
       // FIXME: Used as a stop-gap solution to get JUnit in Eclipse to load classes compiled by this class (Java 9).
-      out.write("--release 8\n");
-      out.write("-cp \"" + classpath + "\"\n");
-      out.write("-d \"" + convertSlashes(destDir.getAbsolutePath()) + "\"");
+      writer.write("--release 8\n");
+      if (classpath.length() > 0)
+        writer.write("-cp \"" + classpath.substring(1) + "\"\n");
+
+      writer.write("-d \"" + convertSlashes(destDir.getAbsolutePath()) + "\"");
       final Iterator<File> iterator = javaSources.iterator();
       while (iterator.hasNext())
-        out.write("\n\"" + convertSlashes(iterator.next().getAbsolutePath()) + "\"");
+        writer.write("\n\"" + convertSlashes(iterator.next().getAbsolutePath()) + "\"");
     }
 
     final String[] args = new String[] {"javac", "@" + tempFile.getAbsolutePath()};
