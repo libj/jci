@@ -176,10 +176,10 @@ public final class JavaCompiler {
     try {
       final Process process = Processes.forkSync(null, System.out, System.err, false, args);
       if (process.exitValue() != 0)
-        throw new CompilationException("\n  javac\n    " + new String(Files.getBytes(tempFile)).replace("\n", " \\\n    "));
+        throw new CompilationException("\n  javac \\\n    " + new String(Files.getBytes(tempFile)).replace("\n", " \\\n    "));
     }
     catch (final InterruptedException e) {
-      throw new CompilationException("\n  javac\n    " + new String(Files.getBytes(tempFile)).replace("\n", " \\\n    "));
+      throw new CompilationException("\n  javac \\\n    " + new String(Files.getBytes(tempFile)).replace("\n", " \\\n    "));
     }
     finally {
       tempFile.delete();
