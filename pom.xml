@@ -39,6 +39,10 @@
   <dependencies>
     <dependency>
       <groupId>org.lib4j</groupId>
+      <artifactId>lib4j-cdm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.lib4j</groupId>
       <artifactId>lib4j-exec</artifactId>
     </dependency>
   </dependencies>

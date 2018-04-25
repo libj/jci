@@ -16,22 +16,59 @@
 
 package org.lib4j.jci;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
+
 public class CompilationException extends Exception {
   private static final long serialVersionUID = -7384036082398812166L;
 
+  private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
+
   public CompilationException() {
     super();
+    this.diagnostics = new ArrayList<Diagnostic<? extends JavaFileObject>>(0);
   }
 
   public CompilationException(final String message) {
     super(message);
+    this.diagnostics = Collections.emptyList();
   }
 
   public CompilationException(final Throwable cause) {
     super(cause);
+    this.diagnostics = Collections.emptyList();
   }
 
   public CompilationException(final String message, final Throwable cause) {
     super(message, cause);
+    this.diagnostics = Collections.emptyList();
+  }
+
+  public CompilationException(final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
+    super();
+    this.diagnostics = Collections.unmodifiableList(diagnostics);
+  }
+
+  public CompilationException(final String message, final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
+    super(message);
+    this.diagnostics = Collections.unmodifiableList(diagnostics);
+  }
+
+  public CompilationException(final Throwable cause, final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
+    super(cause);
+    this.diagnostics = Collections.unmodifiableList(diagnostics);
+  }
+
+  public CompilationException(final String message, final Throwable cause, final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
+    super(message, cause);
+    this.diagnostics = Collections.unmodifiableList(diagnostics);
+  }
+
+  public List<Diagnostic<? extends JavaFileObject>> getDiagnostics() {
+    return diagnostics;
   }
 }
