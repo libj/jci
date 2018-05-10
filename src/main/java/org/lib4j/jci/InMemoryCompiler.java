@@ -47,7 +47,12 @@ public class InMemoryCompiler extends ClassLoader {
 
     @Override
     public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) throws IOException {
-      return classNameToByteCode.get(className);
+      JavaByteCodeObject javaByteCodeObject = classNameToByteCode.get(className);
+      // The javaByteCodeObject will be null for inner classes, so it must be created at the moment it is requested by the compiler
+      if (javaByteCodeObject == null)
+        classNameToByteCode.put(className, javaByteCodeObject = new JavaByteCodeObject(className));
+
+      return javaByteCodeObject;
     }
   }
 
@@ -61,6 +66,19 @@ public class InMemoryCompiler extends ClassLoader {
       final JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, classNameToSource.values());
       if (!task.call())
         throw new CompilationException(diagnostics.getDiagnostics());
+    }
+
+    for (final Map.Entry<String,JavaByteCodeObject> entry : classNameToByteCode.entrySet()) {
+      final byte[] bytes = classNameToByteCode.get(entry.getKey()).getBytes();
+      defineClass(entry.getKey(), bytes, 0, bytes.length);
+
+      String pkg = entry.getKey();
+      int dot;
+      while ((dot = pkg.lastIndexOf('.')) != -1) {
+        pkg = pkg.substring(0, dot);
+        if (getDefinedPackage(pkg) == null)
+          definePackage(pkg, null, null, null, null, null, null, null);
+      }
     }
   }
 
@@ -81,7 +99,7 @@ public class InMemoryCompiler extends ClassLoader {
               if (token == Lexer.Span.WORD)
                 this.start = start;
             }
-            else if (token == Lexer.Span.WHITESPACE) {
+            else if (this.start != -2 && token == Lexer.Span.WHITESPACE) {
               className.append(source.substring(this.start, start));
               final String string = className.toString();
               InMemoryCompiler.this.classNameToSource.put(string, new JavaSourceObject(string, source));
@@ -95,7 +113,7 @@ public class InMemoryCompiler extends ClassLoader {
               this.start = start;
             else if (token == Lexer.Delimiter.SEMI_COLON) {
               className = new StringBuilder(source.substring(this.start, start)).append('.');
-              this.start = -1;
+              this.start = -2;
             }
           }
           else if (token == Keyword.PACKAGE) {
@@ -119,11 +137,5 @@ public class InMemoryCompiler extends ClassLoader {
 
     if (!success[0])
       throw new CompilationException("Could not determine class name");
-  }
-
-  @Override
-  public Class<?> findClass(final String name) throws ClassNotFoundException {
-    final byte[] bytes = classNameToByteCode.get(name).getBytes();
-    return defineClass(name, bytes, 0, bytes.length);
   }
 }
