@@ -16,10 +16,19 @@
 
 package org.lib4j.jci;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
 
 import javax.tools.DiagnosticCollector;
 import javax.tools.FileObject;
@@ -33,53 +42,107 @@ import javax.tools.ToolProvider;
 import org.lib4j.cdm.lexer.Keyword;
 import org.lib4j.cdm.lexer.Lexer;
 import org.lib4j.cdm.lexer.Lexer.Token;
+import org.lib4j.util.Enumerations;
+import org.lib4j.util.MemoryURLStreamHandler;
 
-public class InMemoryCompiler extends ClassLoader {
-  private final JavaCompiler compiler;
-  private final DiagnosticCollector<JavaFileObject> diagnostics;
-  private final Map<String,JavaByteCodeObject> classNameToByteCode = new HashMap<String,JavaByteCodeObject>();
-  private final Map<String,JavaFileObject> classNameToSource = new HashMap<String,JavaFileObject>();
+public class InMemoryCompiler {
+  private static class InMemoryClassLoader extends ClassLoader {
+    private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();;
+    private final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+    private final Map<String,JavaByteCodeObject> classNameToByteCode = new HashMap<String,JavaByteCodeObject>();
+    private final Map<String,Class<?>> classNameToClass = new HashMap<String,Class<?>>();
+    private final Set<String> resources = new HashSet<String>();
+    private final URL url;
 
-  private class FileManager extends ForwardingJavaFileManager<StandardJavaFileManager> {
-    protected FileManager() {
-      super(compiler.getStandardFileManager(diagnostics, null, null));
+    public InMemoryClassLoader(final Map<String,JavaFileObject> classNameToSource) throws ClassNotFoundException, CompilationException, IOException {
+      try (final JavaFileManager fileManager = new ForwardingJavaFileManager<StandardJavaFileManager>(compiler.getStandardFileManager(diagnostics, null, null)) {
+        @Override
+        public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) throws IOException {
+          JavaByteCodeObject javaByteCodeObject = classNameToByteCode.get(className);
+          if (javaByteCodeObject == null)
+            classNameToByteCode.put(className, javaByteCodeObject = new JavaByteCodeObject(className));
+
+          return javaByteCodeObject;
+        }
+      }) {
+        if (!compiler.getTask(null, fileManager, diagnostics, null, null, classNameToSource.values()).call())
+          throw new CompilationException(diagnostics.getDiagnostics());
+      }
+
+      try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+        try (final JarOutputStream jos = new JarOutputStream(baos)) {
+          for (final Map.Entry<String,JavaByteCodeObject> entry : classNameToByteCode.entrySet()) {
+            loadClass(entry.getKey());
+            final String name = entry.getKey().replace('.', '/') + ".class";
+            jos.putNextEntry(new JarEntry(name));
+            jos.write(entry.getValue().getBytes());
+            jos.closeEntry();
+            resources.add(name);
+
+            String pkg = entry.getKey();
+            int dot;
+            while ((dot = pkg.lastIndexOf('.')) != -1) {
+              pkg = pkg.substring(0, dot);
+              final String dir = pkg.replace('.', '/');
+              if (!resources.contains(dir)) {
+                jos.putNextEntry(new JarEntry(dir));
+                resources.add(dir);
+
+                if (getDefinedPackage(pkg) == null)
+                  definePackage(pkg);
+              }
+            }
+          }
+        }
+
+        final URL memUrl = MemoryURLStreamHandler.createURL(baos.toByteArray());
+        url = new URL("jar:" + memUrl.toExternalForm() + "!/");
+      }
     }
 
     @Override
-    public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) throws IOException {
-      JavaByteCodeObject javaByteCodeObject = classNameToByteCode.get(className);
-      // The javaByteCodeObject will be null for inner classes, so it must be created at the moment it is requested by the compiler
-      if (javaByteCodeObject == null)
-        classNameToByteCode.put(className, javaByteCodeObject = new JavaByteCodeObject(className));
+    protected Class<?> findClass(final String name) throws ClassNotFoundException {
+      Class<?> cls = classNameToClass.get(name);
+      if (cls == null) {
+        final JavaByteCodeObject javaByteCodeObject = classNameToByteCode.get(name);
+        if (javaByteCodeObject == null)
+          throw new ClassNotFoundException(name);
 
-      return javaByteCodeObject;
-    }
-  }
-
-  public InMemoryCompiler() {
-    this.compiler = ToolProvider.getSystemJavaCompiler();
-    this.diagnostics = new DiagnosticCollector<JavaFileObject>();
-  }
-
-  public void compile() throws CompilationException, IOException {
-    try (final JavaFileManager fileManager = new FileManager()) {
-      final JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, null, null, classNameToSource.values());
-      if (!task.call())
-        throw new CompilationException(diagnostics.getDiagnostics());
-    }
-
-    for (final Map.Entry<String,JavaByteCodeObject> entry : classNameToByteCode.entrySet()) {
-      final byte[] bytes = classNameToByteCode.get(entry.getKey()).getBytes();
-      defineClass(entry.getKey(), bytes, 0, bytes.length);
-
-      String pkg = entry.getKey();
-      int dot;
-      while ((dot = pkg.lastIndexOf('.')) != -1) {
-        pkg = pkg.substring(0, dot);
-        if (getDefinedPackage(pkg) == null)
-          definePackage(pkg, null, null, null, null, null, null, null);
+        final byte[] b = javaByteCodeObject.getBytes();
+        classNameToClass.put(name, cls = defineClass(name, b, 0, b.length));
       }
+
+      return cls;
     }
+
+    @Override
+    protected URL findResource(final String name) {
+      if (resources.contains(name)) {
+        try {
+          return new URL(url, name);
+        }
+        catch (final MalformedURLException e) {
+          throw new RuntimeException(e);
+        }
+      }
+
+      return null;
+    }
+
+    @Override
+    protected Enumeration<URL> findResources(final String name) throws IOException {
+      return resources.contains(name) ? Enumerations.singleton(new URL(url, name)) : Collections.emptyEnumeration();
+    }
+
+    private Package definePackage(final String name) {
+      return super.definePackage(name, null, null, null, null, null, null, null);
+    }
+  }
+
+  private final Map<String,JavaFileObject> classNameToSource = new HashMap<String,JavaFileObject>();
+
+  public ClassLoader compile() throws ClassNotFoundException, CompilationException, IOException {
+    return new InMemoryClassLoader(classNameToSource);
   }
 
   public void addSource(final String source) throws CompilationException {
@@ -103,7 +166,6 @@ public class InMemoryCompiler extends ClassLoader {
               className.append(source.substring(this.start, start));
               final String string = className.toString();
               InMemoryCompiler.this.classNameToSource.put(string, new JavaSourceObject(string, source));
-              InMemoryCompiler.this.classNameToByteCode.put(string, new JavaByteCodeObject(string));
               success[0] = true;
               return false;
             }

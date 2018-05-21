@@ -16,6 +16,8 @@
 
 package org.lib4j.jci;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -26,16 +28,39 @@ public class InMemoryCompilerTest {
     public void doSomething();
   }
 
+  private static final String[] packages = new String[] {
+    "org.libx4j.jci.test.one",
+    "org.libx4j.jci.test.one.two",
+    "org.libx4j.jci.test.one.two.three",
+    "org.libx4j.jci.test.one.two.four",
+    "org.libx4j.jci.test.one.two.four.five",
+  };
+
+  private static final String[] classes = new String[] {
+    "Test1",
+    "Test2",
+    "Test3"
+  };
+
   @Test
   @SuppressWarnings("unchecked")
   public void test() throws ClassNotFoundException, CompilationException, IllegalAccessException, InstantiationException, InvocationTargetException, IOException, NoSuchMethodException {
     final InMemoryCompiler compiler = new InMemoryCompiler();
-    compiler.addSource("/* Test class */\r// With a comment\npackage org.libx4j.cdm.lexer;\npublic class Test implements org.lib4j.jci.InMemoryCompilerTest.ITest{public void doSomething(){System.out.println(\"Hello world!\");}}");
-    compiler.compile();
+
+    for (final String pkg : packages)
+      for (final String cls : classes)
+        compiler.addSource("/* Test class */\r// With a comment\npackage " + pkg + ";\npublic class " + cls + " implements " + ITest.class.getCanonicalName() + "{public void doSomething(){System.out.println(\"Hello world!\");}}");
+
+    final ClassLoader classLoader = compiler.compile();
 
     // loading and using our compiled class
-    final Class<ITest> test = (Class<ITest>)compiler.loadClass("org.libx4j.cdm.lexer.Test");
-    final ITest iTest = test.getConstructor().newInstance();
-    iTest.doSomething();
+    for (final String pkg : packages) {
+      assertNotNull(classLoader.getResource(pkg.replace('.', '/')));
+      for (final String cls : classes) {
+        final Class<ITest> test = (Class<ITest>)classLoader.loadClass(pkg + "." + cls);
+        final ITest iTest = test.getConstructor().newInstance();
+        iTest.doSomething();
+      }
+    }
   }
 }
