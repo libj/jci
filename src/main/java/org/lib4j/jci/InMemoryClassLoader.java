@@ -38,6 +38,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
+import org.lib4j.lang.Classes;
 import org.lib4j.util.Enumerations;
 import org.lib4j.util.MemoryURLStreamHandler;
 
@@ -72,8 +73,7 @@ class InMemoryClassLoader extends ClassLoader {
        */
       @Override
       protected Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException {
-        final int dollar = name.indexOf('$');
-        return classNameToSource.containsKey(dollar == 0 || (dollar > 0 && name.charAt(dollar - 1) != '.')  ? name.substring(0, dollar) : name) ? null : super.loadClass(name, resolve);
+        return classNameToSource.containsKey(Classes.getRootDeclaringClassName(name)) ? null : super.loadClass(name, resolve);
       }
     });
     try (final JavaFileManager fileManager = new ForwardingJavaFileManager<StandardJavaFileManager>(compiler.getStandardFileManager(diagnostics, null, null)) {
