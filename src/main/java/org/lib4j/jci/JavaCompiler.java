@@ -84,11 +84,8 @@ public final class JavaCompiler {
   }
 
   public void compile(final Collection<File> files) throws CompilationException, IOException {
-    if (files == null)
-      throw new NullPointerException("files == null");
-
-    if (files.size() == 0)
-      throw new IllegalArgumentException("files.size() == 0");
+    if (files == null || files.size() == 0)
+      throw new IllegalArgumentException("files == " + (files == null ? "null" : "[]"));
 
     final LinkedHashSet<File> javaSources = new LinkedHashSet<File>();
     for (final File file : files) {
