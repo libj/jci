@@ -28,7 +28,7 @@ public class InMemoryCompilerTest {
     public void doSomething();
   }
 
-  private static final String[] packages = new String[] {
+  private static final String[] packages = {
     "org.libx4j.jci.test.one",
     "org.libx4j.jci.test.one.two",
     "org.libx4j.jci.test.one.two.three",
@@ -36,7 +36,7 @@ public class InMemoryCompilerTest {
     "org.libx4j.jci.test.one.two.four.five",
   };
 
-  private static final String[] classes = new String[] {
+  private static final String[] classes = {
     "Test1",
     "Test2",
     "Test3"
