@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ import java.util.LinkedHashSet;
 
 import org.lib4j.exec.Processes;
 import org.lib4j.io.Files;
-import org.lib4j.lang.Resources;
 import org.lib4j.util.Collections;
 import org.lib4j.util.jar.Jar;
 import org.lib4j.util.zip.CachedFile;
@@ -123,7 +123,7 @@ public final class JavaCompiler {
         if (!file.isFile() || !file.getName().endsWith(".class"))
           continue;
 
-        selected.add(new CachedFile(file.getPath().substring(tempDir.getPath().length() + 1), Files.getBytes(file)));
+        selected.add(new CachedFile(file.getPath().substring(tempDir.getPath().length() + 1), java.nio.file.Files.readAllBytes(file.toPath())));
       }
 
       Zips.add(destJar.getFile(), selected);
@@ -142,9 +142,9 @@ public final class JavaCompiler {
       throw new IllegalArgumentException("Could not create directory " + destDir);
 
     final StringBuilder classpath = new StringBuilder();
-    final File locationBase = Resources.getLocationBase(JavaCompiler.class);
+    final URL locationBase = JavaCompiler.class.getProtectionDomain().getCodeSource().getLocation();
     if (locationBase != null)
-      classpath.append(File.pathSeparatorChar).append(convertSlashes(locationBase.getAbsolutePath()));
+      classpath.append(File.pathSeparatorChar).append(locationBase);
 
     if (classpathFiles != null)
       for (final File classpathFile : classpathFiles)
@@ -173,10 +173,10 @@ public final class JavaCompiler {
     try {
       final Process process = Processes.forkSync(null, System.out, System.err, false, args);
       if (process.exitValue() != 0)
-        throw new CompilationException("\n  javac \\\n    " + new String(Files.getBytes(tempFile)).replace("\n", " \\\n    "));
+        throw new CompilationException("\n  javac \\\n    " + new String(java.nio.file.Files.readAllBytes(tempFile.toPath())).replace("\n", " \\\n    "));
     }
     catch (final InterruptedException e) {
-      throw new CompilationException("\n  javac \\\n    " + new String(Files.getBytes(tempFile)).replace("\n", " \\\n    "));
+      throw new CompilationException("\n  javac \\\n    " + new String(java.nio.file.Files.readAllBytes(tempFile.toPath())).replace("\n", " \\\n    "));
     }
     finally {
       tempFile.delete();
