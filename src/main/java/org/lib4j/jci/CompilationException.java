@@ -16,8 +16,8 @@
 
 package org.lib4j.jci;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.tools.Diagnostic;
@@ -26,21 +26,27 @@ import javax.tools.JavaFileObject;
 public class CompilationException extends Exception {
   private static final long serialVersionUID = -7384036082398812166L;
 
-  private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
+  private static String buildMessage(final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
+    final StringBuilder builder = new StringBuilder(diagnostics.size() + " Errors\n");
+    final Iterator<Diagnostic<? extends JavaFileObject>> iterator = diagnostics.iterator();
+    for (int i = 0; iterator.hasNext(); i++) {
+      if (i > 0)
+        builder.append('\n');
 
-  public CompilationException() {
-    super();
-    this.diagnostics = new ArrayList<Diagnostic<? extends JavaFileObject>>(0);
+      builder.append(iterator.next());
+    }
+
+    return builder.toString();
   }
 
+  private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
+
   public CompilationException(final String message) {
-    super(message);
-    this.diagnostics = Collections.emptyList();
+    this(message, null);
   }
 
   public CompilationException(final Throwable cause) {
-    super(cause);
-    this.diagnostics = Collections.emptyList();
+    this((String)null, cause);
   }
 
   public CompilationException(final String message, final Throwable cause) {
@@ -49,22 +55,11 @@ public class CompilationException extends Exception {
   }
 
   public CompilationException(final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-    super();
-    this.diagnostics = Collections.unmodifiableList(diagnostics);
+    this(buildMessage(diagnostics), null);
   }
 
-  public CompilationException(final String message, final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-    super(message);
-    this.diagnostics = Collections.unmodifiableList(diagnostics);
-  }
-
-  public CompilationException(final Throwable cause, final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-    super(cause);
-    this.diagnostics = Collections.unmodifiableList(diagnostics);
-  }
-
-  public CompilationException(final String message, final Throwable cause, final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-    super(message, cause);
+  public CompilationException(final List<Diagnostic<? extends JavaFileObject>> diagnostics, final Throwable cause) {
+    super(buildMessage(diagnostics), cause);
     this.diagnostics = Collections.unmodifiableList(diagnostics);
   }
 

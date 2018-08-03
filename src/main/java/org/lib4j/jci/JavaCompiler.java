@@ -87,7 +87,7 @@ public final class JavaCompiler {
     if (files == null || files.size() == 0)
       throw new IllegalArgumentException("files == " + (files == null ? "null" : "[]"));
 
-    final LinkedHashSet<File> javaSources = new LinkedHashSet<File>();
+    final LinkedHashSet<File> javaSources = new LinkedHashSet<>();
     for (final File file : files) {
       if (file.isDirectory())
         javaSources.addAll(Files.listAll(file, JAVA_FILE_FILTER));
@@ -107,7 +107,7 @@ public final class JavaCompiler {
   private void toJar(final Jar destJar, final LinkedHashSet<File> javaSources) throws CompilationException, IOException {
     final File tempDir = File.createTempFile("javac", ".tmp");
     toDir(tempDir, javaSources);
-    final DirectoryStream.Filter<Path> fileFilter = new DirectoryStream.Filter<Path>() {
+    final DirectoryStream.Filter<Path> fileFilter = new DirectoryStream.Filter<>() {
       @Override
       public boolean accept(final Path entry) {
         return true;
@@ -118,7 +118,7 @@ public final class JavaCompiler {
     try {
       toDir(tempDir, javaSources);
       final Collection<File> files = Files.listAll(tempDir);
-      final Collection<CachedFile> selected = new ArrayList<CachedFile>();
+      final Collection<CachedFile> selected = new ArrayList<>();
       for (final File file : files) {
         if (!file.isFile() || !file.getName().endsWith(".class"))
           continue;

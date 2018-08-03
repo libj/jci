@@ -28,7 +28,7 @@ import org.lib4j.cdm.lexer.Lexer;
 import org.lib4j.cdm.lexer.Lexer.Token;
 
 public class InMemoryCompiler {
-  private final Map<String,JavaFileObject> classNameToSource = new HashMap<String,JavaFileObject>();
+  private final Map<String,JavaFileObject> classNameToSource = new HashMap<>();
 
   public ClassLoader compile() throws ClassNotFoundException, CompilationException, IOException {
     return new InMemoryClassLoader(classNameToSource);

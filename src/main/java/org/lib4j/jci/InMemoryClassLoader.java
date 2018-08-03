@@ -35,7 +35,6 @@ import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
 import org.lib4j.lang.Classes;
@@ -44,10 +43,10 @@ import org.lib4j.util.MemoryURLStreamHandler;
 
 class InMemoryClassLoader extends ClassLoader {
   private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();;
-  private final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-  private final Map<String,JavaByteCodeObject> classNameToByteCode = new HashMap<String,JavaByteCodeObject>();
-  private final Map<String,Class<?>> classNameToClass = new HashMap<String,Class<?>>();
-  private final Set<String> resources = new HashSet<String>();
+  private final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+  private final Map<String,JavaByteCodeObject> classNameToByteCode = new HashMap<>();
+  private final Map<String,Class<?>> classNameToClass = new HashMap<>();
+  private final Set<String> resources = new HashSet<>();
   private final URL url;
 
   public InMemoryClassLoader(final Map<String,JavaFileObject> classNameToSource) throws ClassNotFoundException, CompilationException, IOException {
@@ -76,7 +75,7 @@ class InMemoryClassLoader extends ClassLoader {
         return classNameToSource.containsKey(Classes.getRootDeclaringClassName(name)) ? null : super.loadClass(name, resolve);
       }
     });
-    try (final JavaFileManager fileManager = new ForwardingJavaFileManager<StandardJavaFileManager>(compiler.getStandardFileManager(diagnostics, null, null)) {
+    try (final JavaFileManager fileManager = new ForwardingJavaFileManager<>(compiler.getStandardFileManager(diagnostics, null, null)) {
       @Override
       public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) throws IOException {
         JavaByteCodeObject javaByteCodeObject = classNameToByteCode.get(className);
@@ -117,7 +116,7 @@ class InMemoryClassLoader extends ClassLoader {
       }
 
       final URL memUrl = MemoryURLStreamHandler.createURL(baos.toByteArray());
-      url = new URL("jar:" + memUrl.toExternalForm() + "!/");
+      url = new URL("jar:" + memUrl + "!/");
     }
   }
 
