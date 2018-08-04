@@ -27,13 +27,35 @@ import org.lib4j.cdm.lexer.Keyword;
 import org.lib4j.cdm.lexer.Lexer;
 import org.lib4j.cdm.lexer.Lexer.Token;
 
+/**
+ * A Java compiler that compiles Java Source from String, and loads the
+ * compiled Bytecode into an <code>InMemoryClassLoader</code>.
+ * JavaFileObject to compile a Java Source from a String to Bytecode.
+ *
+ * @see InMemoryClassLoader
+ */
 public class InMemoryCompiler {
   private final Map<String,JavaFileObject> classNameToSource = new HashMap<>();
 
+  /**
+   * Compile the sources that have been added to this <code>InMemoryCompiler</code>.
+   *
+   * @return A <code>ClassLoader</code> which contains the compiled and loaded classes.
+   * @throws ClassNotFoundException If a class cannot be found.
+   * @throws CompilationException If a compilation exception has occurred.
+   * @throws IOException If an I/O error has occurred.
+   */
   public ClassLoader compile() throws ClassNotFoundException, CompilationException, IOException {
     return new InMemoryClassLoader(classNameToSource);
   }
 
+  /**
+   * Adds Java source for compilation.
+   *
+   * @param source The source to be added.
+   * @throws CompilationException If the class name could not be determined
+   *           from the <code>source</code> argument.
+   */
   public void addSource(final String source) throws CompilationException {
     final boolean[] success = new boolean[1];
     try {

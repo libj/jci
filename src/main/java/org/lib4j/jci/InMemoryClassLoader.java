@@ -137,16 +137,15 @@ class InMemoryClassLoader extends ClassLoader {
 
   @Override
   protected URL findResource(final String name) {
-    if (resources.contains(name)) {
-      try {
-        return new URL(url, name);
-      }
-      catch (final MalformedURLException e) {
-        throw new RuntimeException(e);
-      }
-    }
+    if (!resources.contains(name))
+      return null;
 
-    return null;
+    try {
+      return new URL(url, name);
+    }
+    catch (final MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override
