@@ -60,13 +60,20 @@ public class InMemoryCompiler {
     final boolean[] success = new boolean[1];
     try {
       Lexer.tokenize(new StringReader(source), source.length(), new Lexer.Token.Listener() {
+        private int inParen = 0;
         private int start = -2;
         private StringBuilder className;
 
         @Override
         public boolean onToken(final Token token, final int start, final int end) {
           if (className != null) {
-            if (token == Keyword.CLASS || token == Keyword.INTERFACE) {
+            if (token == Lexer.Delimiter.PAREN_OPEN) {
+              ++inParen;
+            }
+            else if (token == Lexer.Delimiter.PAREN_CLOSE) {
+              --inParen;
+            }
+            else if (inParen == 0 && (token == Keyword.CLASS || token == Keyword.INTERFACE)) {
               this.start = -1;
             }
             else if (this.start == -1) {
