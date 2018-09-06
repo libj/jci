@@ -37,7 +37,7 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import org.lib4j.lang.Classes;
+import org.lib4j.util.Classes;
 import org.lib4j.util.Enumerations;
 import org.lib4j.util.MemoryURLStreamHandler;
 
