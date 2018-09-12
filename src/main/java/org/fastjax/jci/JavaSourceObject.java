@@ -14,28 +14,23 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.lib4j.jci;
+package org.fastjax.jci;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
 
 import javax.tools.SimpleJavaFileObject;
 
-public class JavaByteCodeObject extends SimpleJavaFileObject {
-  private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+public class JavaSourceObject extends SimpleJavaFileObject {
+  private final String source;
 
-  protected JavaByteCodeObject(final String name) {
-    super(URI.create("bytecode:///" + name + name.replace('.', '/') + Kind.CLASS.extension), Kind.CLASS);
+  protected JavaSourceObject(final String className, final String source) {
+    super(URI.create("source:///" + className.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
+    this.source = source;
   }
 
   @Override
-  public OutputStream openOutputStream() throws IOException {
-    return baos;
-  }
-
-  public byte[] getBytes() {
-    return baos.toByteArray();
+  public CharSequence getCharContent(final boolean ignoreEncodingErrors) throws IOException {
+    return source;
   }
 }
