@@ -23,9 +23,9 @@ import java.util.Map;
 
 import javax.tools.JavaFileObject;
 
+import org.fastjax.cdm.lexer.Lexer;
+import org.fastjax.cdm.lexer.Lexer.Token;
 import org.lib4j.cdm.lexer.Keyword;
-import org.lib4j.cdm.lexer.Lexer;
-import org.lib4j.cdm.lexer.Lexer.Token;
 
 /**
  * A Java compiler that compiles Java Source from String, and loads the

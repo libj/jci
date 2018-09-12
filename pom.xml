@@ -38,8 +38,9 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.lib4j</groupId>
-      <artifactId>lib4j-cdm</artifactId>
+      <groupId>org.fastjax</groupId>
+      <artifactId>fastjax-cdm</artifactId>
+      <version>0.0.7-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.fastjax</groupId>
