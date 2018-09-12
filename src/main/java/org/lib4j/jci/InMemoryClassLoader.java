@@ -37,9 +37,9 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import org.lib4j.util.Classes;
-import org.lib4j.util.Enumerations;
-import org.lib4j.util.MemoryURLStreamHandler;
+import org.fastjax.util.Classes;
+import org.fastjax.util.Enumerations;
+import org.fastjax.util.MemoryURLStreamHandler;
 
 class InMemoryClassLoader extends ClassLoader {
   private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();;

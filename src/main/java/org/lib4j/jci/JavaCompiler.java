@@ -30,10 +30,10 @@ import java.util.LinkedHashSet;
 
 import org.lib4j.exec.Processes;
 import org.lib4j.io.Files;
-import org.lib4j.util.Collections;
-import org.lib4j.util.jar.Jar;
-import org.lib4j.util.zip.CachedFile;
-import org.lib4j.util.zip.Zips;
+import org.fastjax.util.Collections;
+import org.fastjax.util.jar.Jar;
+import org.fastjax.util.zip.CachedFile;
+import org.fastjax.util.zip.Zips;
 
 public final class JavaCompiler {
   public static final FileFilter JAVA_FILE_FILTER = new FileFilter() {
