@@ -42,8 +42,9 @@
       <artifactId>lib4j-cdm</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.lib4j</groupId>
-      <artifactId>lib4j-exec</artifactId>
+      <groupId>org.fastjax</groupId>
+      <artifactId>fastjax-exec</artifactId>
+      <version>1.2.9-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
