@@ -75,7 +75,7 @@ class InMemoryClassLoader extends ClassLoader {
         return classNameToSource.containsKey(Classes.getRootDeclaringClassName(name)) ? null : super.loadClass(name, resolve);
       }
     });
-    try (final JavaFileManager fileManager = new ForwardingJavaFileManager<>(compiler.getStandardFileManager(diagnostics, null, null)) {
+    try (final JavaFileManager fileManager = new ForwardingJavaFileManager<JavaFileManager>(compiler.getStandardFileManager(diagnostics, null, null)) {
       @Override
       public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) throws IOException {
         JavaByteCodeObject javaByteCodeObject = classNameToByteCode.get(className);

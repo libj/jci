@@ -26,14 +26,12 @@
   </parent>
   <groupId>org.fastjax</groupId>
   <artifactId>fastjax-jci</artifactId>
-  <version>1.2.3-SNAPSHOT</version>
+  <version>0.8.3-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>
     Java Compiler Interface.
   </description>
   <properties>
-    <maven.compiler.source>9</maven.compiler.source>
-    <maven.compiler.target>9</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
@@ -45,7 +43,7 @@
     <dependency>
       <groupId>org.fastjax</groupId>
       <artifactId>fastjax-exec</artifactId>
-      <version>1.2.9-SNAPSHOT</version>
+      <version>0.8.9-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

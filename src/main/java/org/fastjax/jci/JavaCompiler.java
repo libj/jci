@@ -107,7 +107,7 @@ public final class JavaCompiler {
   private void toJar(final Jar destJar, final LinkedHashSet<File> javaSources) throws CompilationException, IOException {
     final File tempDir = File.createTempFile("javac", ".tmp");
     toDir(tempDir, javaSources);
-    final DirectoryStream.Filter<Path> fileFilter = new DirectoryStream.Filter<>() {
+    final DirectoryStream.Filter<Path> fileFilter = new DirectoryStream.Filter<Path>() {
       @Override
       public boolean accept(final Path entry) {
         return true;
