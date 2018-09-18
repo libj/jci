@@ -31,11 +31,11 @@ public class InMemoryCompilerTest {
   }
 
   private static final String[] packages = {
-    "org.openjax.jci.test.one",
-    "org.openjax.jci.test.one.two",
-    "org.openjax.jci.test.one.two.three",
-    "org.openjax.jci.test.one.two.four",
-    "org.openjax.jci.test.one.two.four.five",
+    "org.fastjax.jci.test.one",
+    "org.fastjax.jci.test.one.two",
+    "org.fastjax.jci.test.one.two.three",
+    "org.fastjax.jci.test.one.two.four",
+    "org.fastjax.jci.test.one.two.four.five",
   };
 
   private static final String[] classes = {
