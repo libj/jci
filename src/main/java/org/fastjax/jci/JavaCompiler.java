@@ -28,8 +28,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
-import org.fastjax.io.Files;
 import org.fastjax.exec.Processes;
+import org.fastjax.io.Files;
 import org.fastjax.util.Collections;
 import org.fastjax.util.jar.Jar;
 import org.fastjax.util.zip.CachedFile;
@@ -171,8 +171,8 @@ public final class JavaCompiler {
 
     final String[] args = new String[] {"javac", "@" + tempFile.getAbsolutePath()};
     try {
-      final Process process = Processes.forkSync(null, System.out, System.err, false, args);
-      if (process.exitValue() != 0)
+      final int exitValue = Processes.forkSync(null, System.out, System.err, false, args);
+      if (exitValue != 0)
         throw new CompilationException("\n  javac \\\n    " + new String(java.nio.file.Files.readAllBytes(tempFile.toPath())).replace("\n", " \\\n    "));
     }
     catch (final InterruptedException e) {
