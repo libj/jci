@@ -171,7 +171,7 @@ public final class JavaCompiler {
 
     final String[] args = new String[] {"javac", "@" + tempFile.getAbsolutePath()};
     try {
-      final int exitValue = Processes.forkSync(null, System.out, System.err, false, args);
+      final int exitValue = Processes.forkSync(null, System.out, System.err, false, null, null, args);
       if (exitValue != 0)
         throw new CompilationException("\n  javac \\\n    " + new String(java.nio.file.Files.readAllBytes(tempFile.toPath())).replace("\n", " \\\n    "));
     }
