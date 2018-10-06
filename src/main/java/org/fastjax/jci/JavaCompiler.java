@@ -17,29 +17,31 @@
 package org.fastjax.jci;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.fastjax.exec.Processes;
-import org.fastjax.io.Files;
+import org.fastjax.io.FileUtils;
 import org.fastjax.util.Collections;
 import org.fastjax.util.jar.Jar;
 import org.fastjax.util.zip.CachedFile;
 import org.fastjax.util.zip.Zips;
 
 public final class JavaCompiler {
-  public static final FileFilter JAVA_FILE_FILTER = new FileFilter() {
+  public static final Predicate<File> JAVA_FILE_FILTER = new Predicate<File>() {
     @Override
-    public boolean accept(final File pathname) {
-      return pathname.getName().endsWith(".java");
+    public boolean test(final File t) {
+      return t.getName().endsWith(".java");
     }
   };
 
@@ -90,7 +92,7 @@ public final class JavaCompiler {
     final LinkedHashSet<File> javaSources = new LinkedHashSet<>();
     for (final File file : files) {
       if (file.isDirectory())
-        javaSources.addAll(Files.listAll(file, JAVA_FILE_FILTER));
+        javaSources.addAll(Files.walk(file.toPath()).map(p -> p.toFile()).filter(JAVA_FILE_FILTER).collect(Collectors.toList()));
       else
         javaSources.add(file);
     }
@@ -114,22 +116,25 @@ public final class JavaCompiler {
       }
     };
 
-    Files.deleteAllOnExit(tempDir.toPath(), fileFilter);
+    FileUtils.deleteAllOnExit(tempDir.toPath(), fileFilter);
     try {
       toDir(tempDir, javaSources);
-      final Collection<File> files = Files.listAll(tempDir);
       final Collection<CachedFile> selected = new ArrayList<>();
-      for (final File file : files) {
-        if (!file.isFile() || !file.getName().endsWith(".class"))
-          continue;
-
-        selected.add(new CachedFile(file.getPath().substring(tempDir.getPath().length() + 1), java.nio.file.Files.readAllBytes(file.toPath())));
-      }
+      Files.walk(tempDir.toPath()).forEach(p -> {
+        final File file = p.toFile();
+        try {
+          if (file.isFile() && file.getName().endsWith(".class"))
+            selected.add(new CachedFile(file.getPath().substring(tempDir.getPath().length() + 1), Files.readAllBytes(file.toPath())));
+        }
+        catch (final IOException e) {
+          throw new IllegalStateException(e);
+        }
+      });
 
       Zips.add(destJar.getFile(), selected);
     }
     finally {
-      Files.deleteAllOnExit(tempDir.toPath(), fileFilter);
+      FileUtils.deleteAllOnExit(tempDir.toPath(), fileFilter);
     }
   }
 
@@ -173,10 +178,10 @@ public final class JavaCompiler {
     try {
       final int exitValue = Processes.forkSync(null, System.out, System.err, false, null, null, args);
       if (exitValue != 0)
-        throw new CompilationException("\n  javac \\\n    " + new String(java.nio.file.Files.readAllBytes(tempFile.toPath())).replace("\n", " \\\n    "));
+        throw new CompilationException("\n  javac \\\n    " + new String(Files.readAllBytes(tempFile.toPath())).replace("\n", " \\\n    "));
     }
     catch (final InterruptedException e) {
-      throw new CompilationException("\n  javac \\\n    " + new String(java.nio.file.Files.readAllBytes(tempFile.toPath())).replace("\n", " \\\n    "));
+      throw new CompilationException("\n  javac \\\n    " + new String(Files.readAllBytes(tempFile.toPath())).replace("\n", " \\\n    "));
     }
     finally {
       tempFile.delete();
