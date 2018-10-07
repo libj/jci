@@ -31,8 +31,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.fastjax.exec.Processes;
-import org.fastjax.io.FileUtils;
-import org.fastjax.util.Collections;
+import org.fastjax.io.FastFiles;
+import org.fastjax.util.FastCollections;
 import org.fastjax.util.jar.Jar;
 import org.fastjax.util.zip.CachedFile;
 import org.fastjax.util.zip.Zips;
@@ -50,7 +50,7 @@ public final class JavaCompiler {
   private final Jar destJar;
 
   public JavaCompiler(final File destDir, final File ... classpath) {
-    this(destDir, Collections.asCollection(new LinkedHashSet<File>(), classpath));
+    this(destDir, FastCollections.asCollection(new LinkedHashSet<File>(), classpath));
   }
 
   public JavaCompiler(final File destDir, final Collection<File> classpath) {
@@ -66,7 +66,7 @@ public final class JavaCompiler {
   }
 
   public JavaCompiler(final Jar destJar, final File ... classpath) {
-    this(destJar, Collections.asCollection(new LinkedHashSet<File>(), classpath));
+    this(destJar, FastCollections.asCollection(new LinkedHashSet<File>(), classpath));
   }
 
   public JavaCompiler(final Jar destJar, final Collection<File> classpath) {
@@ -82,7 +82,7 @@ public final class JavaCompiler {
   }
 
   public void compile(final File ... files) throws CompilationException, IOException {
-    compile(Collections.asCollection(new ArrayList<File>(), files));
+    compile(FastCollections.asCollection(new ArrayList<File>(), files));
   }
 
   public void compile(final Collection<File> files) throws CompilationException, IOException {
@@ -98,7 +98,7 @@ public final class JavaCompiler {
     }
 
     if (javaSources.size() == 0)
-      throw new IllegalArgumentException("no source files: " + Collections.toString(files, ", "));
+      throw new IllegalArgumentException("no source files: " + FastCollections.toString(files, ", "));
 
     if (destDir != null)
       toDir(destDir, javaSources);
@@ -116,7 +116,7 @@ public final class JavaCompiler {
       }
     };
 
-    FileUtils.deleteAllOnExit(tempDir.toPath(), fileFilter);
+    FastFiles.deleteAllOnExit(tempDir.toPath(), fileFilter);
     try {
       toDir(tempDir, javaSources);
       final Collection<CachedFile> selected = new ArrayList<>();
@@ -134,7 +134,7 @@ public final class JavaCompiler {
       Zips.add(destJar.getFile(), selected);
     }
     finally {
-      FileUtils.deleteAllOnExit(tempDir.toPath(), fileFilter);
+      FastFiles.deleteAllOnExit(tempDir.toPath(), fileFilter);
     }
   }
 
