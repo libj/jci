@@ -18,6 +18,7 @@ package org.fastjax.jci;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -26,6 +27,8 @@ import org.fastjax.jci.InMemoryCompiler;
 import org.junit.Test;
 
 public class InMemoryCompilerTest {
+  private static final File compiledClassesDir = new File("target/test-classes");
+
   public static interface ITest {
     public void doSomething();
   }
@@ -53,7 +56,7 @@ public class InMemoryCompilerTest {
       for (final String cls : classes)
         compiler.addSource("/* Test class */\r// With a comment\npackage " + pkg + ";\npublic class " + cls + " implements " + ITest.class.getCanonicalName() + "{public void doSomething(){System.out.println(\"Hello world!\");}}");
 
-    final ClassLoader classLoader = compiler.compile();
+    final ClassLoader classLoader = compiler.compile(compiledClassesDir);
 
     // loading and using our compiled class
     for (final String pkg : packages) {

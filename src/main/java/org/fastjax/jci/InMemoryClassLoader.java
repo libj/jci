@@ -17,9 +17,12 @@
 package org.fastjax.jci;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -41,6 +44,13 @@ import org.fastjax.util.Classes;
 import org.fastjax.util.Enumerations;
 import org.fastjax.util.MemoryURLStreamHandler;
 
+/**
+ * A {@code ClassLoader} that compiles sources specified in the constructor in
+ * memory, and optionally writes the compiled classes to a destination
+ * directory.
+ *
+ * @see InMemoryCompiler
+ */
 class InMemoryClassLoader extends ClassLoader {
   private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();;
   private final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
@@ -49,10 +59,22 @@ class InMemoryClassLoader extends ClassLoader {
   private final Set<String> resources = new HashSet<>();
   private final URL url;
 
-  public InMemoryClassLoader(final Map<String,JavaFileObject> classNameToSource) throws ClassNotFoundException, CompilationException, IOException {
+  /**
+   * Creates a new {@code InMemoryClassLoader} with the specified sources and
+   * destination directory.
+   *
+   * @param classNameToSource The map of class name {@code String} to source
+   *          {@code JavaFileObject} object.
+   * @param destDir The destination directory of the compiled classes, or
+   *          {@code null} if the classes should not be written.
+   * @throws CompilationException If an error has occurred while compiling the
+   *           specified sources.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public InMemoryClassLoader(final Map<String,JavaFileObject> classNameToSource, final File destDir) throws CompilationException, IOException {
     super(new ClassLoader() {
       /**
-       * Overloaded to force resource resolution to this InMemoryClassLoader
+       * Overloaded to force resource resolution to this InMemoryClassLoader.
        */
       @Override
       public URL getResource(final String name) {
@@ -60,7 +82,7 @@ class InMemoryClassLoader extends ClassLoader {
       }
 
       /**
-       * Overloaded to force resource resolution to this InMemoryClassLoader
+       * Overloaded to force resource resolution to this InMemoryClassLoader.
        */
       @Override
       public Enumeration<URL> getResources(final String name) throws IOException {
@@ -68,13 +90,15 @@ class InMemoryClassLoader extends ClassLoader {
       }
 
       /**
-       * Overloaded to force loading of classes defined in this InMemoryClassLoader, by this InMemoryClassLoader
+       * Overloaded to force loading of classes defined in this
+       * InMemoryClassLoader, by this InMemoryClassLoader.
        */
       @Override
       protected Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException {
         return classNameToSource.containsKey(Classes.getRootDeclaringClassName(name)) ? null : super.loadClass(name, resolve);
       }
     });
+
     try (final JavaFileManager fileManager = new ForwardingJavaFileManager<JavaFileManager>(compiler.getStandardFileManager(diagnostics, null, null)) {
       @Override
       public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) throws IOException {
@@ -93,7 +117,13 @@ class InMemoryClassLoader extends ClassLoader {
       try (final JarOutputStream jos = new JarOutputStream(baos)) {
         for (final Map.Entry<String,JavaByteCodeObject> entry : classNameToByteCode.entrySet()) {
           loadClass(entry.getKey());
-          final String name = entry.getKey().replace('.', '/') + ".class";
+          final String name = entry.getKey().replace('.', '/').concat(".class");
+          if (destDir != null) {
+            final File file = new File(destDir, name);
+            file.getParentFile().mkdirs();
+            Files.write(file.toPath(), entry.getValue().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+          }
+
           jos.putNextEntry(new JarEntry(name));
           jos.write(entry.getValue().getBytes());
           jos.closeEntry();
@@ -117,6 +147,9 @@ class InMemoryClassLoader extends ClassLoader {
 
       final URL memUrl = MemoryURLStreamHandler.createURL(baos.toByteArray());
       url = new URL("jar:" + memUrl + "!/");
+    }
+    catch (final ClassNotFoundException e) {
+      throw new IllegalStateException(e);
     }
   }
 

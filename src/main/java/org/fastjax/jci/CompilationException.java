@@ -29,7 +29,7 @@ public class CompilationException extends Exception {
   private static String buildMessage(final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
     final StringBuilder builder = new StringBuilder(diagnostics.size() + " Errors\n");
     final Iterator<Diagnostic<? extends JavaFileObject>> iterator = diagnostics.iterator();
-    for (int i = 0; iterator.hasNext(); i++) {
+    for (int i = 0; iterator.hasNext(); ++i) {
       if (i > 0)
         builder.append('\n');
 

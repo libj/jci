@@ -16,6 +16,7 @@
 
 package org.fastjax.jci;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
@@ -37,6 +38,23 @@ public class InMemoryCompiler {
   private final Map<String,JavaFileObject> classNameToSource = new HashMap<>();
 
   /**
+   * Compile the sources that have been added to this {@code InMemoryCompiler},
+   * and, if compilation is successful, write compiled classes to the specified
+   * destination directory.
+   *
+   * @param destDir The destination directory of the compiled classes, or
+   *          {@code null} if the classes should not be written.
+   * @return A {@code ClassLoader} which contains the compiled and loaded
+   *         classes.
+   * @throws ClassNotFoundException If a class cannot be found.
+   * @throws CompilationException If a compilation exception has occurred.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public ClassLoader compile(final File destDir) throws ClassNotFoundException, CompilationException, IOException {
+    return new InMemoryClassLoader(classNameToSource, destDir);
+  }
+
+  /**
    * Compile the sources that have been added to this {@code InMemoryCompiler}.
    *
    * @return A {@code ClassLoader} which contains the compiled and loaded
@@ -46,7 +64,7 @@ public class InMemoryCompiler {
    * @throws IOException If an I/O error has occurred.
    */
   public ClassLoader compile() throws ClassNotFoundException, CompilationException, IOException {
-    return new InMemoryClassLoader(classNameToSource);
+    return new InMemoryClassLoader(classNameToSource, null);
   }
 
   /**
