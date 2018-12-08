@@ -19,6 +19,8 @@ package org.fastjax.jci;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -138,7 +140,7 @@ class InMemoryClassLoader extends ClassLoader {
               jos.putNextEntry(new JarEntry(dir));
               resources.add(dir);
 
-              if (getDefinedPackage(pkg) == null)
+              if (getPackage(pkg) == null)
                 definePackage(pkg);
             }
           }

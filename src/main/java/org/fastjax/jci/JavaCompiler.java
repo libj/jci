@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.fastjax.exec.Processes;
@@ -36,13 +35,6 @@ import org.fastjax.util.FastCollections;
 import org.fastjax.util.zip.ZipWriter;
 
 public final class JavaCompiler {
-  public static final Predicate<File> JAVA_FILE_FILTER = new Predicate<File>() {
-    @Override
-    public boolean test(final File t) {
-      return t.getName().endsWith(".java");
-    }
-  };
-
   private final Collection<File> classpathFiles;
   private final File destDir;
   private final ZipWriter destJar;
@@ -90,7 +82,7 @@ public final class JavaCompiler {
     final LinkedHashSet<File> javaSources = new LinkedHashSet<>();
     for (final File file : files) {
       if (file.isDirectory())
-        javaSources.addAll(Files.walk(file.toPath()).map(p -> p.toFile()).filter(JAVA_FILE_FILTER).collect(Collectors.toList()));
+        javaSources.addAll(Files.walk(file.toPath()).map(p -> p.toFile()).filter(f -> f.getName().endsWith(".java")).collect(Collectors.toList()));
       else
         javaSources.add(file);
     }
@@ -134,7 +126,7 @@ public final class JavaCompiler {
   }
 
   private static String convertSlashes(final String s) {
-    return s.replace("\\", "/");
+    return s.replace('\\', '/');
   }
 
   private void toDir(final File destDir, final LinkedHashSet<File> javaSources) throws CompilationException, IOException {
@@ -159,7 +151,9 @@ public final class JavaCompiler {
     try (final FileWriter writer = new FileWriter(tempFile)) {
       writer.write("-Xlint:none\n");
       // FIXME: Used as a stop-gap solution to get JUnit in Eclipse to load classes compiled by this class (Java 9).
-      writer.write("--release 8\n");
+      if (!System.getProperty("java.version").startsWith("1."))
+        writer.write("--release 8\n");
+
       if (classpath.length() > 0)
         writer.write("-cp \"" + classpath.substring(1) + "\"\n");
 
