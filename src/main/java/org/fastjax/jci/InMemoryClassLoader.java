@@ -16,11 +16,16 @@
 
 package org.fastjax.jci;
 
+import javax.tools.DiagnosticCollector;
+import javax.tools.FileObject;
+import javax.tools.ForwardingJavaFileManager;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileManager;
+import javax.tools.JavaFileObject;
+import javax.tools.ToolProvider;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -34,14 +39,6 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
-import javax.tools.DiagnosticCollector;
-import javax.tools.FileObject;
-import javax.tools.ForwardingJavaFileManager;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileManager;
-import javax.tools.JavaFileObject;
-import javax.tools.ToolProvider;
-
 import org.fastjax.util.Classes;
 import org.fastjax.util.Enumerations;
 import org.fastjax.util.MemoryURLStreamHandler;
@@ -54,7 +51,7 @@ import org.fastjax.util.MemoryURLStreamHandler;
  * @see InMemoryCompiler
  */
 class InMemoryClassLoader extends ClassLoader {
-  private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();;
+  private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
   private final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
   private final Map<String,JavaByteCodeObject> classNameToByteCode = new HashMap<>();
   private final Map<String,Class<?>> classNameToClass = new HashMap<>();

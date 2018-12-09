@@ -16,21 +16,19 @@
 
 package org.fastjax.jci;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import org.fastjax.jci.CompilationException;
-import org.fastjax.jci.InMemoryCompiler;
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 public class InMemoryCompilerTest {
   private static final File compiledClassesDir = new File("target/test-classes");
 
-  public static interface ITest {
-    public void doSomething();
+  public interface ITest {
+    void doSomething();
   }
 
   private static final String[] packages = {
