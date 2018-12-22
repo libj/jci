@@ -16,13 +16,6 @@
 
 package org.fastjax.jci;
 
-import javax.tools.DiagnosticCollector;
-import javax.tools.FileObject;
-import javax.tools.ForwardingJavaFileManager;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileManager;
-import javax.tools.JavaFileObject;
-import javax.tools.ToolProvider;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -39,9 +32,17 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
+import javax.tools.DiagnosticCollector;
+import javax.tools.FileObject;
+import javax.tools.ForwardingJavaFileManager;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileManager;
+import javax.tools.JavaFileObject;
+import javax.tools.ToolProvider;
+
+import org.fastjax.net.MemoryURLStreamHandler;
 import org.fastjax.util.Classes;
 import org.fastjax.util.Enumerations;
-import org.fastjax.util.MemoryURLStreamHandler;
 
 /**
  * A {@code ClassLoader} that compiles sources specified in the constructor in

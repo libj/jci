@@ -44,5 +44,10 @@
       <artifactId>exec</artifactId>
       <version>0.8.9-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>org.fastjax</groupId>
+      <artifactId>net</artifactId>
+      <version>0.5.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 </project>
