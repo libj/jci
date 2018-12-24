@@ -61,18 +61,41 @@ class InMemoryClassLoader extends ClassLoader {
 
   /**
    * Creates a new {@code InMemoryClassLoader} with the specified sources and
-   * destination directory.
+   * destination directory. This constructor is equivalent to calling:
+   * <p>
+   * <blockquote>
+   * {@code new InMemoryClassLoader(ClassLoader.getSystemClassLoader(), classNameToSource, destDir)}
+   * </blockquote>
    *
    * @param classNameToSource The map of class name {@code String} to source
    *          {@code JavaFileObject} object.
+   * @param options Compiler options, or {@code null} for no options.
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
    * @throws CompilationException If an error has occurred while compiling the
    *           specified sources.
    * @throws IOException If an I/O error has occurred.
    */
-  public InMemoryClassLoader(final Map<String,JavaFileObject> classNameToSource, final File destDir) throws CompilationException, IOException {
-    super(new ClassLoader() {
+  InMemoryClassLoader(final Map<String,JavaFileObject> classNameToSource, final Iterable<String> options, final File destDir) throws CompilationException, IOException {
+    this(ClassLoader.getSystemClassLoader(), classNameToSource, options, destDir);
+  }
+
+  /**
+   * Creates a new {@code InMemoryClassLoader} with the specified sources and
+   * destination directory.
+   *
+   * @param parent The parent {@code ClassLoader}.
+   * @param classNameToSource The map of class name {@code String} to source
+   *          {@code JavaFileObject} object.
+   * @param options Compiler options, or {@code null} for no options.
+   * @param destDir The destination directory of the compiled classes, or
+   *          {@code null} if the classes should not be written.
+   * @throws CompilationException If an error has occurred while compiling the
+   *           specified sources.
+   * @throws IOException If an I/O error has occurred.
+   */
+  InMemoryClassLoader(final ClassLoader parent, final Map<String,JavaFileObject> classNameToSource, final Iterable<String> options, final File destDir) throws CompilationException, IOException {
+    super(new ClassLoader(parent) {
       /**
        * Overloaded to force resource resolution to this InMemoryClassLoader.
        */
@@ -109,14 +132,16 @@ class InMemoryClassLoader extends ClassLoader {
         return javaByteCodeObject;
       }
     }) {
-      if (!compiler.getTask(null, fileManager, diagnostics, null, null, classNameToSource.values()).call())
+      if (!compiler.getTask(null, fileManager, diagnostics, options, null, classNameToSource.values()).call())
         throw new CompilationException(diagnostics.getDiagnostics());
     }
 
     try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
       try (final JarOutputStream jos = new JarOutputStream(baos)) {
         for (final Map.Entry<String,JavaByteCodeObject> entry : classNameToByteCode.entrySet()) {
-          loadClass(entry.getKey());
+          if (!entry.getKey().endsWith("package-info"))
+            loadClass(entry.getKey());
+
           final String name = entry.getKey().replace('.', '/').concat(".class");
           if (destDir != null) {
             final File file = new File(destDir, name);
@@ -139,7 +164,7 @@ class InMemoryClassLoader extends ClassLoader {
               resources.add(dir);
 
               if (getPackage(pkg) == null)
-                definePackage(pkg);
+                definePackage(pkg, null, null, null, null, null, null, null);
             }
           }
         }
@@ -177,16 +202,12 @@ class InMemoryClassLoader extends ClassLoader {
       return new URL(url, name);
     }
     catch (final MalformedURLException e) {
-      throw new RuntimeException(e);
+      throw new IllegalStateException(e);
     }
   }
 
   @Override
   protected Enumeration<URL> findResources(final String name) throws IOException {
     return resources.contains(name) ? Enumerations.singleton(new URL(url, name)) : Collections.emptyEnumeration();
-  }
-
-  private Package definePackage(final String name) {
-    return super.definePackage(name, null, null, null, null, null, null, null);
   }
 }

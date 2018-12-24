@@ -21,14 +21,29 @@ import java.net.URI;
 
 import javax.tools.SimpleJavaFileObject;
 
-public class JavaSourceObject extends SimpleJavaFileObject {
+/**
+ * A {@code SimpleJavaFileObject} representing Java Source (i.e. a ".java"
+ * file).
+ */
+class JavaSourceObject extends SimpleJavaFileObject {
   private final String source;
 
-  protected JavaSourceObject(final String className, final String source) {
-    super(URI.create("source:///" + className.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
+  /**
+   * Creates a new {@code JavaSourceObject} with the specified name and source.
+   *
+   * @param name The name.
+   * @param source The source.
+   */
+  JavaSourceObject(final String name, final String source) {
+    super(URI.create("source:///" + name.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
     this.source = source;
   }
 
+  /**
+   * Returns the source for this {@code JavaSourceObject}.
+   *
+   * @return The source for this {@code JavaSourceObject}.
+   */
   @Override
   public CharSequence getCharContent(final boolean ignoreEncodingErrors) throws IOException {
     return source;

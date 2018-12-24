@@ -17,24 +17,40 @@
 package org.fastjax.jci;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 
 import javax.tools.SimpleJavaFileObject;
 
-public class JavaByteCodeObject extends SimpleJavaFileObject {
+/**
+ * A {@code SimpleJavaFileObject} representing Java Bytecode (i.e. a ".class"
+ * file).
+ */
+class JavaByteCodeObject extends SimpleJavaFileObject {
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-  protected JavaByteCodeObject(final String name) {
-    super(URI.create("bytecode:///" + name + name.replace('.', '/') + Kind.CLASS.extension), Kind.CLASS);
+  /**
+   * Creates a new {@code JavaByteCodeObject} with the specified name.
+   *
+   * @param name The name.
+   */
+  JavaByteCodeObject(final String name) {
+    super(URI.create("bytecode:///" + name.replace('.', '/') + Kind.CLASS.extension), Kind.CLASS);
   }
 
+  /**
+   * Returns the bytecode as an {@code OutputStream}.
+   *
+   * @return The bytecode as an {@code OutputStream}.
+   */
   @Override
-  public OutputStream openOutputStream() throws IOException {
+  public OutputStream openOutputStream() {
     return baos;
   }
 
+  /**
+   * @return The bytecode as a byte array.
+   */
   public byte[] getBytes() {
     return baos.toByteArray();
   }

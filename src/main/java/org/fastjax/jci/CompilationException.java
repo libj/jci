@@ -23,10 +23,16 @@ import java.util.List;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
+/**
+ * An exception that signals an error during compilation of sources.
+ */
 public class CompilationException extends Exception {
   private static final long serialVersionUID = -7384036082398812166L;
 
   private static String buildMessage(final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
+    if (diagnostics == null || diagnostics.size() == 0)
+      return null;
+
     final StringBuilder builder = new StringBuilder(diagnostics.size() + " Errors\n");
     final Iterator<Diagnostic<? extends JavaFileObject>> iterator = diagnostics.iterator();
     for (int i = 0; iterator.hasNext(); ++i) {
@@ -41,28 +47,63 @@ public class CompilationException extends Exception {
 
   private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
 
+  /**
+   * Constructs a new {@code CompilationException} with the specified detail
+   * message.
+   *
+   * @param message The detail message.
+   */
   public CompilationException(final String message) {
     this(message, null);
   }
 
+  /**
+   * Constructs a new {@code CompilationException} with the specified cause.
+   *
+   * @param cause The cause.
+   */
   public CompilationException(final Throwable cause) {
     this((String)null, cause);
   }
 
+  /**
+   * Constructs a new {@code CompilationException} with the specified detail
+   * message and cause.
+   *
+   * @param message The detail message.
+   * @param cause The cause.
+   */
   public CompilationException(final String message, final Throwable cause) {
     super(message, cause);
     this.diagnostics = Collections.emptyList();
   }
 
+  /**
+   * Constructs a new {@code CompilationException} with the specified list of
+   * {@link Diagnostic} objects.
+   *
+   * @param diagnostics The list of {@link Diagnostic} objects.
+   */
   public CompilationException(final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
     this(buildMessage(diagnostics), null);
   }
 
+  /**
+   * Constructs a new {@code CompilationException} with the specified list of
+   * {@link Diagnostic} objects and cause.
+   *
+   * @param diagnostics The list of {@link Diagnostic} objects.
+   * @param cause The cause.
+   */
   public CompilationException(final List<Diagnostic<? extends JavaFileObject>> diagnostics, final Throwable cause) {
     super(buildMessage(diagnostics), cause);
-    this.diagnostics = Collections.unmodifiableList(diagnostics);
+    this.diagnostics = diagnostics == null ? Collections.emptyList() : Collections.unmodifiableList(diagnostics);
   }
 
+  /**
+   * @return The list of {@link Diagnostic} objects. If no diagnostics were
+   *         provided, this method returns an empty list.
+   */
   public List<Diagnostic<? extends JavaFileObject>> getDiagnostics() {
     return diagnostics;
   }

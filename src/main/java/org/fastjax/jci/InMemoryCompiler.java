@@ -42,20 +42,136 @@ public class InMemoryCompiler {
    * and, if compilation is successful, write compiled classes to the specified
    * destination directory.
    *
+   * @param classLoader The {@code ClassLoader} for resolution of linked
+   *          classes.
+   * @param options Compiler options, or {@code null} for no options.
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
+   * @return A {@code ClassLoader} which contains the compiled and loaded
+   *         classes.
+   * @throws CompilationException If a compilation exception has occurred.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public ClassLoader compile(final ClassLoader classLoader, final Iterable<String> options, final File destDir) throws CompilationException, IOException {
+    return new InMemoryClassLoader(classLoader, classNameToSource, options, destDir);
+  }
+
+  /**
+   * Compile the sources that have been added to this {@code InMemoryCompiler}.
+   *
+   * @param classLoader The {@code ClassLoader} for resolution of linked
+   *          classes.
+   * @param options Compiler options, or {@code null} for no options.
    * @return A {@code ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final File destDir) throws ClassNotFoundException, CompilationException, IOException {
-    return new InMemoryClassLoader(classNameToSource, destDir);
+  public ClassLoader compile(final ClassLoader classLoader, final Iterable<String> options) throws ClassNotFoundException, CompilationException, IOException {
+    return new InMemoryClassLoader(classLoader, classNameToSource, options, null);
+  }
+
+  /**
+   * Compile the sources that have been added to this {@code InMemoryCompiler},
+   * and, if compilation is successful, write compiled classes to the specified
+   * destination directory. This method is equivalent to calling:
+   * <p>
+   * <blockquote>
+   * {@code compile(ClassLoader.getSystemClassLoader(), options, destDir)}
+   * </blockquote>
+   *
+   * @param options Compiler options, or {@code null} for no options.
+   * @param destDir The destination directory of the compiled classes, or
+   *          {@code null} if the classes should not be written.
+   * @return A {@code ClassLoader} which contains the compiled and loaded
+   *         classes.
+   * @throws CompilationException If a compilation exception has occurred.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public ClassLoader compile(final Iterable<String> options, final File destDir) throws CompilationException, IOException {
+    return new InMemoryClassLoader(classNameToSource, options, destDir);
   }
 
   /**
    * Compile the sources that have been added to this {@code InMemoryCompiler}.
+   * This method is equivalent to calling:
+   * <p>
+   * <blockquote>
+   * {@code compile(ClassLoader.getSystemClassLoader(), options)}
+   * </blockquote>
+   *
+   * @param options Compiler options, or {@code null} for no options.
+   * @return A {@code ClassLoader} which contains the compiled and loaded
+   *         classes.
+   * @throws ClassNotFoundException If a class cannot be found.
+   * @throws CompilationException If a compilation exception has occurred.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public ClassLoader compile(final Iterable<String> options) throws ClassNotFoundException, CompilationException, IOException {
+    return new InMemoryClassLoader(classNameToSource, options, null);
+  }
+
+  /**
+   * Compile the sources that have been added to this {@code InMemoryCompiler},
+   * and, if compilation is successful, write compiled classes to the specified
+   * destination directory.
+   *
+   * @param classLoader The {@code ClassLoader} for resolution of linked
+   *          classes.
+   * @param destDir The destination directory of the compiled classes, or
+   *          {@code null} if the classes should not be written.
+   * @return A {@code ClassLoader} which contains the compiled and loaded
+   *         classes.
+   * @throws CompilationException If a compilation exception has occurred.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public ClassLoader compile(final ClassLoader classLoader, final File destDir) throws CompilationException, IOException {
+    return new InMemoryClassLoader(classLoader, classNameToSource, null, destDir);
+  }
+
+  /**
+   * Compile the sources that have been added to this {@code InMemoryCompiler}.
+   *
+   * @param classLoader The {@code ClassLoader} for resolution of linked
+   *          classes.
+   * @return A {@code ClassLoader} which contains the compiled and loaded
+   *         classes.
+   * @throws ClassNotFoundException If a class cannot be found.
+   * @throws CompilationException If a compilation exception has occurred.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public ClassLoader compile(final ClassLoader classLoader) throws ClassNotFoundException, CompilationException, IOException {
+    return new InMemoryClassLoader(classLoader, classNameToSource, null, null);
+  }
+
+  /**
+   * Compile the sources that have been added to this {@code InMemoryCompiler},
+   * and, if compilation is successful, write compiled classes to the specified
+   * destination directory. This method is equivalent to calling:
+   * <p>
+   * <blockquote>
+   * {@code compile(ClassLoader.getSystemClassLoader(), destDir)}
+   * </blockquote>
+   *
+   * @param destDir The destination directory of the compiled classes, or
+   *          {@code null} if the classes should not be written.
+   * @return A {@code ClassLoader} which contains the compiled and loaded
+   *         classes.
+   * @throws CompilationException If a compilation exception has occurred.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public ClassLoader compile(final File destDir) throws CompilationException, IOException {
+    return new InMemoryClassLoader(classNameToSource, null, destDir);
+  }
+
+  /**
+   * Compile the sources that have been added to this {@code InMemoryCompiler}.
+   * This method is equivalent to calling:
+   * <p>
+   * <blockquote>
+   * {@code compile(ClassLoader.getSystemClassLoader())}
+   * </blockquote>
    *
    * @return A {@code ClassLoader} which contains the compiled and loaded
    *         classes.
@@ -64,23 +180,28 @@ public class InMemoryCompiler {
    * @throws IOException If an I/O error has occurred.
    */
   public ClassLoader compile() throws ClassNotFoundException, CompilationException, IOException {
-    return new InMemoryClassLoader(classNameToSource, null);
+    return new InMemoryClassLoader(classNameToSource, null, null);
   }
 
   /**
    * Adds Java source for compilation.
    *
    * @param source The source to be added.
-   * @throws CompilationException If the class name could not be determined from
+   * @throws IllegalArgumentException If the class name could not be determined from
    *           the {@code source} argument.
    */
-  public void addSource(final String source) throws CompilationException {
+  public void addSource(final String source) {
     final boolean[] success = new boolean[1];
     try {
       Lexer.tokenize(new StringReader(source), source.length(), new Lexer.Token.Listener() {
         private int inParen = 0;
         private int start = -2;
         private StringBuilder className;
+        private Token lastKeyword;
+
+        @Override
+        public void onStartDocument() {
+        }
 
         @Override
         public boolean onToken(final Token token, final int start, final int end) {
@@ -91,7 +212,8 @@ public class InMemoryCompiler {
             else if (token == Lexer.Delimiter.PAREN_CLOSE) {
               --inParen;
             }
-            else if (inParen == 0 && (token == Keyword.CLASS || token == Keyword.INTERFACE)) {
+            else if (inParen == 0 && (token == Keyword.CLASS || token == Keyword.INTERFACE || token == Keyword.ENUM || token == Keyword.$INTERFACE)) {
+              lastKeyword = token;
               this.start = -1;
             }
             else if (this.start == -1) {
@@ -116,9 +238,11 @@ public class InMemoryCompiler {
             }
           }
           else if (token == Keyword.PACKAGE) {
+            lastKeyword = token;
             this.start = -1;
           }
-          else if (token == Keyword.CLASS || token == Keyword.INTERFACE) {
+          else if (token == Keyword.CLASS || token == Keyword.INTERFACE || token == Keyword.ENUM || token == Keyword.$INTERFACE) {
+            lastKeyword = token;
             className = new StringBuilder();
             this.start = -1;
           }
@@ -128,13 +252,23 @@ public class InMemoryCompiler {
 
           return true;
         }
+
+        @Override
+        public void onEndDocument() {
+          if (lastKeyword == Keyword.PACKAGE && className != null) {
+            className.append("package-info");
+            final String string = className.toString();
+            InMemoryCompiler.this.classNameToSource.put(string, new JavaSourceObject(string, source));
+            success[0] = true;
+          }
+        }
       });
     }
     catch (final IOException e) {
-      throw new CompilationException(e);
+      throw new IllegalStateException(e);
     }
 
     if (!success[0])
-      throw new CompilationException("Could not determine class name");
+      throw new IllegalArgumentException("Could not determine class name: \n" + source);
   }
 }

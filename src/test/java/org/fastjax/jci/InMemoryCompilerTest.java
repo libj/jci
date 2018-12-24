@@ -52,7 +52,7 @@ public class InMemoryCompilerTest {
 
     for (final String pkg : packages)
       for (final String cls : classes)
-        compiler.addSource("/* Test class */\r// With a comment\npackage " + pkg + ";\npublic class " + cls + " implements " + ITest.class.getCanonicalName() + "{public void doSomething(){System.out.println(\"Hello world!\");}}");
+        compiler.addSource("/* Test class */\n// With a comment\npackage " + pkg + ";\npublic class " + cls + " implements " + ITest.class.getCanonicalName() + "{public void doSomething(){System.out.println(\"Hello world!\");}}");
 
     final ClassLoader classLoader = compiler.compile(compiledClassesDir);
 
