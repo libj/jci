@@ -24,7 +24,7 @@ FastJAX JCI provides a reference implementation of Java's runtime compiler API w
 
 ### JavaDocs
 
-JavaDocs are available [here](https://www.fastjax.org/javadocs/org/fastjax/jci/package-summary.html).
+JavaDocs are available [here](https://jci.fastjax.org/javadocs/).
 
 ## Contributing
 
