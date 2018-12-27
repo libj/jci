@@ -27,6 +27,7 @@
   <artifactId>jci</artifactId>
   <version>0.8.3-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
+  <url>https://jci.fastjax.org/</url>
   <description>
     Java Compiler Interface.
   </description>
