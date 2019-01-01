@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 FastJAX
+/* Copyright (c) 2018 OpenJAX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,13 +14,13 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.fastjax.jci;
+package org.openjax.classic.jci;
+
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -32,11 +32,11 @@ public class InMemoryCompilerTest {
   }
 
   private static final String[] packages = {
-    "org.fastjax.jci.test.one",
-    "org.fastjax.jci.test.one.two",
-    "org.fastjax.jci.test.one.two.three",
-    "org.fastjax.jci.test.one.two.four",
-    "org.fastjax.jci.test.one.two.four.five",
+    "org.openjax.classic.jci.test.one",
+    "org.openjax.classic.jci.test.one.two",
+    "org.openjax.classic.jci.test.one.two.three",
+    "org.openjax.classic.jci.test.one.two.four",
+    "org.openjax.classic.jci.test.one.two.four.five",
   };
 
   private static final String[] classes = {
@@ -54,7 +54,7 @@ public class InMemoryCompilerTest {
       for (final String cls : classes)
         compiler.addSource("/* Test class */\n// With a comment\npackage " + pkg + ";\npublic class " + cls + " implements " + ITest.class.getCanonicalName() + "{public void doSomething(){System.out.println(\"Hello world!\");}}");
 
-    final ClassLoader classLoader = compiler.compile(compiledClassesDir);
+    final ClassLoader classLoader = compiler.compile(compiledClassesDir, "-g");
 
     // loading and using our compiled class
     for (final String pkg : packages) {

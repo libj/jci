@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 FastJAX
+/* Copyright (c) 2018 OpenJAX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,19 +14,26 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.fastjax.jci;
+package org.openjax.classic.jci;
+
+import static org.openjax.classic.util.function.Throwing.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.tools.JavaFileObject;
 
-import org.fastjax.cdm.lexer.Keyword;
-import org.fastjax.cdm.lexer.Lexer;
-import org.fastjax.cdm.lexer.Lexer.Token;
+import org.openjax.classic.cdm.lexer.Keyword;
+import org.openjax.classic.cdm.lexer.Lexer;
+import org.openjax.classic.cdm.lexer.Lexer.Token;
+import org.openjax.classic.util.FastCollections;
 
 /**
  * A Java compiler that compiles Java Source from String, and loads the compiled
@@ -35,6 +42,15 @@ import org.fastjax.cdm.lexer.Lexer.Token;
  * @see InMemoryClassLoader
  */
 public class InMemoryCompiler {
+  private static ClassLoader digestOptions(final ClassLoader classLoader, final List<String> options, final List<File> classpath) {
+    if (classpath == null)
+      return classLoader;
+
+    options.add("-cp");
+    options.add(FastCollections.toString(classpath, File.pathSeparatorChar));
+    return new URLClassLoader(classpath.stream().map(rethrow((File f) -> f.toURI().toURL())).toArray(URL[]::new), classLoader);
+  }
+
   private final Map<String,JavaFileObject> classNameToSource = new HashMap<>();
 
   /**
@@ -44,16 +60,18 @@ public class InMemoryCompiler {
    *
    * @param classLoader The {@code ClassLoader} for resolution of linked
    *          classes.
-   * @param options Compiler options, or {@code null} for no options.
+   * @param classpath Compiler classpath, or {@code null} for no classpath.
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
+   * @param options Compiler options.
    * @return A {@code ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final ClassLoader classLoader, final Iterable<String> options, final File destDir) throws CompilationException, IOException {
-    return new InMemoryClassLoader(classLoader, classNameToSource, options, destDir);
+  public ClassLoader compile(final ClassLoader classLoader, final List<File> classpath, final File destDir, final String ... options) throws CompilationException, IOException {
+    final List<String> optionsList = options != null && options.length > 0 ? FastCollections.asCollection(new ArrayList<>(), options) : new ArrayList<>();
+    return new InMemoryClassLoader(digestOptions(classLoader, optionsList, classpath), classNameToSource, optionsList, destDir);
   }
 
   /**
@@ -61,15 +79,16 @@ public class InMemoryCompiler {
    *
    * @param classLoader The {@code ClassLoader} for resolution of linked
    *          classes.
-   * @param options Compiler options, or {@code null} for no options.
+   * @param classpath Compiler classpath, or {@code null} for no classpath.
+   * @param options Compiler options.
    * @return A {@code ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final ClassLoader classLoader, final Iterable<String> options) throws ClassNotFoundException, CompilationException, IOException {
-    return new InMemoryClassLoader(classLoader, classNameToSource, options, null);
+  public ClassLoader compile(final ClassLoader classLoader, final List<File> classpath, final String ... options) throws ClassNotFoundException, CompilationException, IOException {
+    return compile(classLoader, classpath, null, options);
   }
 
   /**
@@ -78,19 +97,20 @@ public class InMemoryCompiler {
    * destination directory. This method is equivalent to calling:
    * <p>
    * <blockquote>
-   * {@code compile(ClassLoader.getSystemClassLoader(), options, destDir)}
+   * {@code compile(ClassLoader.getSystemClassLoader(), classpath, destDir, options)}
    * </blockquote>
    *
-   * @param options Compiler options, or {@code null} for no options.
+   * @param classpath Compiler classpath, or {@code null} for no classpath.
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
+   * @param options Compiler options.
    * @return A {@code ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final Iterable<String> options, final File destDir) throws CompilationException, IOException {
-    return new InMemoryClassLoader(classNameToSource, options, destDir);
+  public ClassLoader compile(final List<File> classpath, final File destDir, final String ... options) throws CompilationException, IOException {
+    return compile(ClassLoader.getSystemClassLoader(), classpath, destDir, options);
   }
 
   /**
@@ -98,51 +118,19 @@ public class InMemoryCompiler {
    * This method is equivalent to calling:
    * <p>
    * <blockquote>
-   * {@code compile(ClassLoader.getSystemClassLoader(), options)}
+   * {@code compile(ClassLoader.getSystemClassLoader(), classpath, options)}
    * </blockquote>
    *
-   * @param options Compiler options, or {@code null} for no options.
+   * @param classpath Compiler classpath, or {@code null} for no classpath.
+   * @param options Compiler options.
    * @return A {@code ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final Iterable<String> options) throws ClassNotFoundException, CompilationException, IOException {
-    return new InMemoryClassLoader(classNameToSource, options, null);
-  }
-
-  /**
-   * Compile the sources that have been added to this {@code InMemoryCompiler},
-   * and, if compilation is successful, write compiled classes to the specified
-   * destination directory.
-   *
-   * @param classLoader The {@code ClassLoader} for resolution of linked
-   *          classes.
-   * @param destDir The destination directory of the compiled classes, or
-   *          {@code null} if the classes should not be written.
-   * @return A {@code ClassLoader} which contains the compiled and loaded
-   *         classes.
-   * @throws CompilationException If a compilation exception has occurred.
-   * @throws IOException If an I/O error has occurred.
-   */
-  public ClassLoader compile(final ClassLoader classLoader, final File destDir) throws CompilationException, IOException {
-    return new InMemoryClassLoader(classLoader, classNameToSource, null, destDir);
-  }
-
-  /**
-   * Compile the sources that have been added to this {@code InMemoryCompiler}.
-   *
-   * @param classLoader The {@code ClassLoader} for resolution of linked
-   *          classes.
-   * @return A {@code ClassLoader} which contains the compiled and loaded
-   *         classes.
-   * @throws ClassNotFoundException If a class cannot be found.
-   * @throws CompilationException If a compilation exception has occurred.
-   * @throws IOException If an I/O error has occurred.
-   */
-  public ClassLoader compile(final ClassLoader classLoader) throws ClassNotFoundException, CompilationException, IOException {
-    return new InMemoryClassLoader(classLoader, classNameToSource, null, null);
+  public ClassLoader compile(final List<File> classpath, final String ... options) throws ClassNotFoundException, CompilationException, IOException {
+    return compile(ClassLoader.getSystemClassLoader(), classpath, null, options);
   }
 
   /**
@@ -151,18 +139,21 @@ public class InMemoryCompiler {
    * destination directory. This method is equivalent to calling:
    * <p>
    * <blockquote>
-   * {@code compile(ClassLoader.getSystemClassLoader(), destDir)}
+   * {@code compile(ClassLoader.getSystemClassLoader(), null, destDir, options)}
    * </blockquote>
    *
+   * @param classLoader The {@code ClassLoader} for resolution of linked
+   *          classes.
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
+   * @param options Compiler options.
    * @return A {@code ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final File destDir) throws CompilationException, IOException {
-    return new InMemoryClassLoader(classNameToSource, null, destDir);
+  public ClassLoader compile(final ClassLoader classLoader, final File destDir, final String ... options) throws CompilationException, IOException {
+    return compile(classLoader, null, destDir, options);
   }
 
   /**
@@ -170,17 +161,60 @@ public class InMemoryCompiler {
    * This method is equivalent to calling:
    * <p>
    * <blockquote>
-   * {@code compile(ClassLoader.getSystemClassLoader())}
+   * {@code compile(ClassLoader.getSystemClassLoader(), null, options)}
    * </blockquote>
    *
+   * @param classLoader The {@code ClassLoader} for resolution of linked
+   *          classes.
+   * @param options Compiler options.
    * @return A {@code ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile() throws ClassNotFoundException, CompilationException, IOException {
-    return new InMemoryClassLoader(classNameToSource, null, null);
+  public ClassLoader compile(final ClassLoader classLoader, final String ... options) throws ClassNotFoundException, CompilationException, IOException {
+    return compile(classLoader, null, null, options);
+  }
+
+  /**
+   * Compile the sources that have been added to this {@code InMemoryCompiler},
+   * and, if compilation is successful, write compiled classes to the specified
+   * destination directory. This method is equivalent to calling:
+   * <p>
+   * <blockquote>
+   * {@code compile(ClassLoader.getSystemClassLoader(), null, destDir, options)}
+   * </blockquote>
+   *
+   * @param destDir The destination directory of the compiled classes, or
+   *          {@code null} if the classes should not be written.
+   * @param options Compiler options.
+   * @return A {@code ClassLoader} which contains the compiled and loaded
+   *         classes.
+   * @throws CompilationException If a compilation exception has occurred.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public ClassLoader compile(final File destDir, final String ... options) throws CompilationException, IOException {
+    return compile(ClassLoader.getSystemClassLoader(), null, destDir, options);
+  }
+
+  /**
+   * Compile the sources that have been added to this {@code InMemoryCompiler}.
+   * This method is equivalent to calling:
+   * <p>
+   * <blockquote>
+   * {@code compile(ClassLoader.getSystemClassLoader(), null, options)}
+   * </blockquote>
+   *
+   * @param options Compiler options.
+   * @return A {@code ClassLoader} which contains the compiled and loaded
+   *         classes.
+   * @throws ClassNotFoundException If a class cannot be found.
+   * @throws CompilationException If a compilation exception has occurred.
+   * @throws IOException If an I/O error has occurred.
+   */
+  public ClassLoader compile(final String ... options) throws ClassNotFoundException, CompilationException, IOException {
+    return compile(ClassLoader.getSystemClassLoader(), null, null, options);
   }
 
   /**

@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 FastJAX
+/* Copyright (c) 2018 OpenJAX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.fastjax.jci;
+package org.openjax.classic.jci;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,9 +40,9 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import org.fastjax.net.MemoryURLStreamHandler;
-import org.fastjax.util.Classes;
-import org.fastjax.util.Enumerations;
+import org.openjax.classic.net.MemoryURLStreamHandler;
+import org.openjax.classic.util.Classes;
+import org.openjax.classic.util.Enumerations;
 
 /**
  * A {@code ClassLoader} that compiles sources specified in the constructor in
@@ -58,27 +58,6 @@ class InMemoryClassLoader extends ClassLoader {
   private final Map<String,Class<?>> classNameToClass = new HashMap<>();
   private final Set<String> resources = new HashSet<>();
   private final URL url;
-
-  /**
-   * Creates a new {@code InMemoryClassLoader} with the specified sources and
-   * destination directory. This constructor is equivalent to calling:
-   * <p>
-   * <blockquote>
-   * {@code new InMemoryClassLoader(ClassLoader.getSystemClassLoader(), classNameToSource, destDir)}
-   * </blockquote>
-   *
-   * @param classNameToSource The map of class name {@code String} to source
-   *          {@code JavaFileObject} object.
-   * @param options Compiler options, or {@code null} for no options.
-   * @param destDir The destination directory of the compiled classes, or
-   *          {@code null} if the classes should not be written.
-   * @throws CompilationException If an error has occurred while compiling the
-   *           specified sources.
-   * @throws IOException If an I/O error has occurred.
-   */
-  InMemoryClassLoader(final Map<String,JavaFileObject> classNameToSource, final Iterable<String> options, final File destDir) throws CompilationException, IOException {
-    this(ClassLoader.getSystemClassLoader(), classNameToSource, options, destDir);
-  }
 
   /**
    * Creates a new {@code InMemoryClassLoader} with the specified sources and
