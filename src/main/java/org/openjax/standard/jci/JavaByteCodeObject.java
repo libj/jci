@@ -14,38 +14,44 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.classic.jci;
+package org.openjax.standard.jci;
 
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.net.URI;
 
 import javax.tools.SimpleJavaFileObject;
 
 /**
- * A {@code SimpleJavaFileObject} representing Java Source (i.e. a ".java"
+ * A {@code SimpleJavaFileObject} representing Java Bytecode (i.e. a ".class"
  * file).
  */
-class JavaSourceObject extends SimpleJavaFileObject {
-  private final String source;
+class JavaByteCodeObject extends SimpleJavaFileObject {
+  private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
   /**
-   * Creates a new {@code JavaSourceObject} with the specified name and source.
+   * Creates a new {@code JavaByteCodeObject} with the specified name.
    *
    * @param name The name.
-   * @param source The source.
    */
-  JavaSourceObject(final String name, final String source) {
-    super(URI.create("source:///" + name.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
-    this.source = source;
+  JavaByteCodeObject(final String name) {
+    super(URI.create("bytecode:///" + name.replace('.', '/') + Kind.CLASS.extension), Kind.CLASS);
   }
 
   /**
-   * Returns the source for this {@code JavaSourceObject}.
+   * Returns the bytecode as an {@code OutputStream}.
    *
-   * @return The source for this {@code JavaSourceObject}.
+   * @return The bytecode as an {@code OutputStream}.
    */
   @Override
-  public CharSequence getCharContent(final boolean ignoreEncodingErrors) throws IOException {
-    return source;
+  public OutputStream openOutputStream() {
+    return baos;
+  }
+
+  /**
+   * @return The bytecode as a byte array.
+   */
+  public byte[] getBytes() {
+    return baos.toByteArray();
   }
 }

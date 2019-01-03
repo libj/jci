@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.classic.jci;
+package org.openjax.standard.jci;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,9 +40,9 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import org.openjax.classic.net.MemoryURLStreamHandler;
-import org.openjax.classic.util.Classes;
-import org.openjax.classic.util.Enumerations;
+import org.openjax.standard.net.MemoryURLStreamHandler;
+import org.openjax.standard.util.Classes;
+import org.openjax.standard.util.Enumerations;
 
 /**
  * A {@code ClassLoader} that compiles sources specified in the constructor in

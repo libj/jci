@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.classic.jci;
+package org.openjax.standard.jci;
 
 import static org.junit.Assert.*;
 
@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
+import org.openjax.standard.jci.CompilationException;
+import org.openjax.standard.jci.InMemoryCompiler;
 
 public class InMemoryCompilerTest {
   private static final File compiledClassesDir = new File("target/test-classes");
@@ -32,11 +34,11 @@ public class InMemoryCompilerTest {
   }
 
   private static final String[] packages = {
-    "org.openjax.classic.jci.test.one",
-    "org.openjax.classic.jci.test.one.two",
-    "org.openjax.classic.jci.test.one.two.three",
-    "org.openjax.classic.jci.test.one.two.four",
-    "org.openjax.classic.jci.test.one.two.four.five",
+    "org.openjax.standard.jci.test.one",
+    "org.openjax.standard.jci.test.one.two",
+    "org.openjax.standard.jci.test.one.two.three",
+    "org.openjax.standard.jci.test.one.two.four",
+    "org.openjax.standard.jci.test.one.two.four.five",
   };
 
   private static final String[] classes = {

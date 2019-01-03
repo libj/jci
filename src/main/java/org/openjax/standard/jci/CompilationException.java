@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.classic.jci;
+package org.openjax.standard.jci;
 
 import java.util.Collections;
 import java.util.Iterator;

@@ -14,9 +14,9 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.classic.jci;
+package org.openjax.standard.jci;
 
-import static org.openjax.classic.util.function.Throwing.*;
+import static org.openjax.standard.util.function.Throwing.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,10 +30,10 @@ import java.util.Map;
 
 import javax.tools.JavaFileObject;
 
-import org.openjax.classic.cdm.lexer.Keyword;
-import org.openjax.classic.cdm.lexer.Lexer;
-import org.openjax.classic.cdm.lexer.Lexer.Token;
-import org.openjax.classic.util.FastCollections;
+import org.openjax.standard.cdm.lexer.Keyword;
+import org.openjax.standard.cdm.lexer.Lexer;
+import org.openjax.standard.cdm.lexer.Lexer.Token;
+import org.openjax.standard.util.FastCollections;
 
 /**
  * A Java compiler that compiles Java Source from String, and loads the compiled

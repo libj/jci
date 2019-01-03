@@ -1,4 +1,4 @@
-# OpenJAX Classic JCI
+# OpenJAX Standard JCI
 
 **Java API Extension for the Java Compiler Interface**
 
@@ -6,7 +6,7 @@
 
 Java's tools API provides an abstract interface for the implementation of runtime compilers. Though this interface provides the full span of functionality necessary to compile Java source in runtime, the APIs fall short to provide a reference implementation to allow developers to easily integrate a runtime compiler into their applications.
 
-OpenJAX Classic JCI provides a reference implementation of Java's runtime compiler API with its `InMemoryCompiler`, which can be used to compile sources and load the resulting bytecode in runtime.
+OpenJAX Standard JCI provides a reference implementation of Java's runtime compiler API with its `InMemoryCompiler`, which can be used to compile sources and load the resulting bytecode in runtime.
 
 ## Usage
 
@@ -24,7 +24,7 @@ OpenJAX Classic JCI provides a reference implementation of Java's runtime compil
 
 ### JavaDocs
 
-JavaDocs are available [here](https://classic.openjax.org/jci/apidocs/).
+JavaDocs are available [here](https://standard.openjax.org/jci/apidocs/).
 
 ## Contributing
 
