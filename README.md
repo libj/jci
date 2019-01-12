@@ -1,6 +1,8 @@
 # OpenJAX Standard JCI
 
-**Java API Extension for the Java Compiler Interface**
+> Java API Extension for the Java Compiler Interface
+
+[![Build Status](https://travis-ci.org/openjax/standard-jci.png)](https://travis-ci.org/openjax/standard-jci)
 
 ## Introduction
 
