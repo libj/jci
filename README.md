@@ -3,6 +3,7 @@
 > Java API Extension for the Java Compiler Interface
 
 [![Build Status](https://travis-ci.org/openjax/standard-jci.png)](https://travis-ci.org/openjax/standard-jci)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/standard-jci/badge.svg)](https://coveralls.io/github/openjax/standard-jci)
 
 ## Introduction
 
