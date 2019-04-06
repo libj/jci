@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
-import org.openjax.standard.jci.CompilationException;
-import org.openjax.standard.jci.InMemoryCompiler;
 
 public class InMemoryCompilerTest {
   private static final File compiledClassesDir = new File("target/test-classes");
