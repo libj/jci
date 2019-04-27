@@ -4,6 +4,8 @@
 
 [![Build Status](https://travis-ci.org/openjax/standard-jci.png)](https://travis-ci.org/openjax/standard-jci)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/standard-jci/badge.svg)](https://coveralls.io/github/openjax/standard-jci)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.standard/jci.svg)](https://www.javadoc.io/doc/org.openjax.standard/jci)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.standard/jci.svg)](https://mvnrepository.com/artifact/org.openjax.standard/jci)
 
 ## Introduction
 
@@ -24,10 +26,6 @@ OpenJAX Standard JCI provides a reference implementation of Java's runtime compi
     final Object obj = cls.getConstructor().newInstance();
     assertEquals("helloWorld", cls.getMethod("helloWorld").invoke(obj));
   ```
-
-### JavaDocs
-
-JavaDocs are available [here](https://standard.openjax.org/jci/apidocs/).
 
 ## Contributing
 
