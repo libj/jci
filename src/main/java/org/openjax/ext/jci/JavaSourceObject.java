@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.standard.jci;
+package org.openjax.ext.jci;
 
 import java.io.IOException;
 import java.net.URI;
