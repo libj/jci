@@ -26,7 +26,7 @@
   </parent>
   <artifactId>jci</artifactId>
   <version>0.8.3-SNAPSHOT</version>
-  <name>${project.groupId}:${project.artifactId}</name>
+  <name>OpenJAX Extensions JCI</name>
   <description>
     Java Compiler Interface.
   </description>
