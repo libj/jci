@@ -1,17 +1,17 @@
-# OpenJAX Extensions JCI
+# OpenJAX JCI
 
 > Java API Extension for the Java Compiler Interface
 
-[![Build Status](https://travis-ci.org/openjax/ext-jci.png)](https://travis-ci.org/openjax/ext-jci)
-[![Coverage Status](https://coveralls.io/repos/github/openjax/ext-jci/badge.svg)](https://coveralls.io/github/openjax/ext-jci)
-[![Javadocs](https://www.javadoc.io/badge/org.openjax.ext/jci.svg)](https://www.javadoc.io/doc/org.openjax.ext/jci)
-[![Released Version](https://img.shields.io/maven-central/v/org.openjax.ext/jci.svg)](https://mvnrepository.com/artifact/org.openjax.ext/jci)
+[![Build Status](https://travis-ci.org/openjax/jci.png)](https://travis-ci.org/openjax/jci)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/jci/badge.svg)](https://coveralls.io/github/openjax/jci)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax/jci.svg)](https://www.javadoc.io/doc/org.openjax/jci)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax/jci.svg)](https://mvnrepository.com/artifact/org.openjax/jci)
 
 ## Introduction
 
 Java's tools API provides an abstract interface for the implementation of runtime compilers. Though this interface provides the full span of functionality necessary to compile Java source in runtime, the APIs fall short to provide a reference implementation to allow developers to easily integrate a runtime compiler into their applications.
 
-OpenJAX Extensions JCI provides a reference implementation of Java's runtime compiler API with its `InMemoryCompiler`, which can be used to compile sources and load the resulting bytecode in runtime.
+OpenJAX JCI provides a reference implementation of Java's runtime compiler API with its `InMemoryCompiler`, which can be used to compile sources and load the resulting bytecode in runtime.
 
 ## Usage
 

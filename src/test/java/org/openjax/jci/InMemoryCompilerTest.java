@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.ext.jci;
+package org.openjax.jci;
 
 import static org.junit.Assert.*;
 
@@ -32,11 +32,11 @@ public class InMemoryCompilerTest {
   }
 
   private static final String[] packages = {
-    "org.openjax.ext.jci.test.one",
-    "org.openjax.ext.jci.test.one.two",
-    "org.openjax.ext.jci.test.one.two.three",
-    "org.openjax.ext.jci.test.one.two.four",
-    "org.openjax.ext.jci.test.one.two.four.five",
+    "org.openjax.jci.test.one",
+    "org.openjax.jci.test.one.two",
+    "org.openjax.jci.test.one.two.three",
+    "org.openjax.jci.test.one.two.four",
+    "org.openjax.jci.test.one.two.four.five",
   };
 
   private static final String[] classes = {

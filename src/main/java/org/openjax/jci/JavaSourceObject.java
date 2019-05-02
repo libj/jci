@@ -14,44 +14,38 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.ext.jci;
+package org.openjax.jci;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
+import java.io.IOException;
 import java.net.URI;
 
 import javax.tools.SimpleJavaFileObject;
 
 /**
- * A {@code SimpleJavaFileObject} representing Java Bytecode (i.e. a ".class"
+ * A {@code SimpleJavaFileObject} representing Java Source (i.e. a ".java"
  * file).
  */
-class JavaByteCodeObject extends SimpleJavaFileObject {
-  private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+class JavaSourceObject extends SimpleJavaFileObject {
+  private final String source;
 
   /**
-   * Creates a new {@code JavaByteCodeObject} with the specified name.
+   * Creates a new {@code JavaSourceObject} with the specified name and source.
    *
    * @param name The name.
+   * @param source The source.
    */
-  JavaByteCodeObject(final String name) {
-    super(URI.create("bytecode:///" + name.replace('.', '/') + Kind.CLASS.extension), Kind.CLASS);
+  JavaSourceObject(final String name, final String source) {
+    super(URI.create("source:///" + name.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
+    this.source = source;
   }
 
   /**
-   * Returns the bytecode as an {@code OutputStream}.
+   * Returns the source for this {@code JavaSourceObject}.
    *
-   * @return The bytecode as an {@code OutputStream}.
+   * @return The source for this {@code JavaSourceObject}.
    */
   @Override
-  public OutputStream openOutputStream() {
-    return baos;
-  }
-
-  /**
-   * @return The bytecode as a byte array.
-   */
-  public byte[] getBytes() {
-    return baos.toByteArray();
+  public CharSequence getCharContent(final boolean ignoreEncodingErrors) throws IOException {
+    return source;
   }
 }
