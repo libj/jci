@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 OpenJAX
+/* Copyright (c) 2018 LibJ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,9 +14,9 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.jci;
+package org.libj.jci;
 
-import static org.openjax.util.function.Throwing.*;
+import static org.libj.util.function.Throwing.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,10 +30,10 @@ import java.util.Map;
 
 import javax.tools.JavaFileObject;
 
+import org.openjax.cdm.lexer.Keyword;
 import org.openjax.cdm.lexer.Lexer;
 import org.openjax.cdm.lexer.Lexer.Token;
-import org.openjax.cdm.lexer.Keyword;
-import org.openjax.util.FastCollections;
+import org.libj.util.FastCollections;
 
 /**
  * A Java compiler that compiles Java Source from String, and loads the compiled

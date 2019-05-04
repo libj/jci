@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 OpenJAX
+/* Copyright (c) 2018 LibJ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.jci;
+package org.libj.jci;
 
 import static org.junit.Assert.*;
 
@@ -32,11 +32,11 @@ public class InMemoryCompilerTest {
   }
 
   private static final String[] packages = {
-    "org.openjax.jci.test.one",
-    "org.openjax.jci.test.one.two",
-    "org.openjax.jci.test.one.two.three",
-    "org.openjax.jci.test.one.two.four",
-    "org.openjax.jci.test.one.two.four.five",
+    "org.libj.jci.test.one",
+    "org.libj.jci.test.one.two",
+    "org.libj.jci.test.one.two.three",
+    "org.libj.jci.test.one.two.four",
+    "org.libj.jci.test.one.two.four.five",
   };
 
   private static final String[] classes = {

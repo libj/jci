@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 OpenJAX
+/* Copyright (c) 2018 LibJ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.jci;
+package org.libj.jci;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,9 +40,9 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import org.openjax.net.MemoryURLStreamHandler;
-import org.openjax.util.Classes;
-import org.openjax.util.Enumerations;
+import org.libj.net.MemoryURLStreamHandler;
+import org.libj.util.Classes;
+import org.libj.util.Enumerations;
 
 /**
  * A {@code ClassLoader} that compiles sources specified in the constructor in
