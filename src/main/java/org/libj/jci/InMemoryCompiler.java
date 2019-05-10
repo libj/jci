@@ -33,7 +33,7 @@ import javax.tools.JavaFileObject;
 import org.openjax.cdm.lexer.Keyword;
 import org.openjax.cdm.lexer.Lexer;
 import org.openjax.cdm.lexer.Lexer.Token;
-import org.libj.util.FastCollections;
+import org.libj.util.CollectionUtil;
 
 /**
  * A Java compiler that compiles Java Source from String, and loads the compiled
@@ -47,7 +47,7 @@ public class InMemoryCompiler {
       return classLoader;
 
     options.add("-cp");
-    options.add(FastCollections.toString(classpath, File.pathSeparatorChar));
+    options.add(CollectionUtil.toString(classpath, File.pathSeparatorChar));
     return new URLClassLoader(classpath.stream().map(rethrow((File f) -> f.toURI().toURL())).toArray(URL[]::new), classLoader);
   }
 
@@ -70,7 +70,7 @@ public class InMemoryCompiler {
    * @throws IOException If an I/O error has occurred.
    */
   public ClassLoader compile(final ClassLoader classLoader, final List<File> classpath, final File destDir, final String ... options) throws CompilationException, IOException {
-    final List<String> optionsList = options != null && options.length > 0 ? FastCollections.asCollection(new ArrayList<>(), options) : new ArrayList<>();
+    final List<String> optionsList = options != null && options.length > 0 ? CollectionUtil.asCollection(new ArrayList<>(), options) : new ArrayList<>();
     return new InMemoryClassLoader(digestOptions(classLoader, optionsList, classpath), classNameToSource, optionsList, destDir);
   }
 
