@@ -1,7 +1,5 @@
 # LibJ JCI
 
-> Java API Extension for the Java Compiler Interface
-
 [![Build Status](https://travis-ci.org/libj/jci.png)](https://travis-ci.org/libj/jci)
 [![Coverage Status](https://coveralls.io/repos/github/libj/jci/badge.svg)](https://coveralls.io/github/libj/jci)
 [![Javadocs](https://www.javadoc.io/badge/org.libj/jci.svg)](https://www.javadoc.io/doc/org.libj/jci)
@@ -9,23 +7,25 @@
 
 ## Introduction
 
+LibJ JCI is a Java API Extension for the Java Compiler Interface.
+
 Java's tools API provides an abstract interface for the implementation of runtime compilers. Though this interface provides the full span of functionality necessary to compile Java source in runtime, the APIs fall short to provide a reference implementation to allow developers to easily integrate a runtime compiler into their applications.
 
 LibJ JCI provides a reference implementation of Java's runtime compiler API with its `InMemoryCompiler`, which can be used to compile sources and load the resulting bytecode in runtime.
 
 ## Usage
 
-  The following example illustrates how to compile Java source into bytecode that is thereafter available to be loaded in the resulting `ClassLoader`.
+The following example illustrates how to compile Java source into bytecode that is thereafter available to be loaded in the resulting `ClassLoader`.
 
-  ```java
-    final InMemoryCompiler compiler = new InMemoryCompiler();
-    compiler.addSource("public class HelloWorld {public String helloWorld() {return \"Hello world!\";}}");
-    final ClassLoader classLoader = compiler.compile();
+```java
+InMemoryCompiler compiler = new InMemoryCompiler();
+compiler.addSource("public class HelloWorld {public String helloWorld() {return \"Hello world!\";}}");
+ClassLoader classLoader = compiler.compile();
 
-    final Class<?> cls = classLoader.loadClass("HelloWorld");
-    final Object obj = cls.getConstructor().newInstance();
-    assertEquals("helloWorld", cls.getMethod("helloWorld").invoke(obj));
-  ```
+Class<?> cls = classLoader.loadClass("HelloWorld");
+Object obj = cls.getConstructor().newInstance();
+assertEquals("helloWorld", cls.getMethod("helloWorld").invoke(obj));
+```
 
 ## Contributing
 
