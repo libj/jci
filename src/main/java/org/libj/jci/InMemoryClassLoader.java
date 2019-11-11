@@ -111,7 +111,7 @@ class InMemoryClassLoader extends ClassLoader {
         return javaByteCodeObject;
       }
     }) {
-      if (!compiler.getTask(null, fileManager, diagnostics, options, null, classNameToSource.values()).call())
+      if (classNameToSource.size() > 0 && !compiler.getTask(null, fileManager, diagnostics, options, null, classNameToSource.values()).call())
         throw new CompilationException(diagnostics.getDiagnostics());
     }
 
