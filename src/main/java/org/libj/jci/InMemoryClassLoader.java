@@ -19,7 +19,6 @@ package org.libj.jci;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -41,6 +40,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
 import org.libj.net.MemoryURLStreamHandler;
+import org.libj.net.URLs;
 import org.libj.util.Classes;
 import org.libj.util.Enumerations;
 
@@ -174,15 +174,7 @@ class InMemoryClassLoader extends ClassLoader {
 
   @Override
   protected URL findResource(final String name) {
-    if (!resources.contains(name))
-      return null;
-
-    try {
-      return new URL(url, name);
-    }
-    catch (final MalformedURLException e) {
-      throw new IllegalStateException(e);
-    }
+    return resources.contains(name) ? URLs.create(url, name) : null;
   }
 
   @Override
