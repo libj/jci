@@ -30,10 +30,10 @@ import java.util.Map;
 
 import javax.tools.JavaFileObject;
 
+import org.libj.util.CollectionUtil;
 import org.openjax.cdm.lexer.Keyword;
 import org.openjax.cdm.lexer.Lexer;
 import org.openjax.cdm.lexer.Lexer.Token;
-import org.libj.util.CollectionUtil;
 
 /**
  * A Java compiler that compiles Java Source from String, and loads the compiled
@@ -221,8 +221,8 @@ public class InMemoryCompiler {
    * Adds Java source for compilation.
    *
    * @param source The source to be added.
-   * @throws IllegalArgumentException If the class name could not be determined from
-   *           the {@code source} argument.
+   * @throws IllegalArgumentException If the class name could not be determined
+   *           from the {@code source} argument.
    */
   public void addSource(final String source) {
     final boolean[] success = new boolean[1];

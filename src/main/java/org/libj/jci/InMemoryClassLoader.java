@@ -72,6 +72,7 @@ class InMemoryClassLoader extends ClassLoader {
    * @throws CompilationException If an error has occurred while compiling the
    *           specified sources.
    * @throws IOException If an I/O error has occurred.
+   * @throws NullPointerException If {@code classNameToSource} is null.
    */
   InMemoryClassLoader(final ClassLoader parent, final Map<String,JavaFileObject> classNameToSource, final Iterable<String> options, final File destDir) throws CompilationException, IOException {
     super(new ClassLoader(parent) {

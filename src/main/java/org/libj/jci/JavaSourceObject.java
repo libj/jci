@@ -42,6 +42,7 @@ class JavaSourceObject extends SimpleJavaFileObject {
   /**
    * Returns the source for this {@link JavaSourceObject}.
    *
+   * @param ignoreEncodingErrors Whether to ignore encoding errors.
    * @return The source for this {@link JavaSourceObject}.
    */
   @Override
