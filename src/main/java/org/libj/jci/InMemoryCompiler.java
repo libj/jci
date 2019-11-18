@@ -37,7 +37,7 @@ import org.libj.util.CollectionUtil;
 
 /**
  * A Java compiler that compiles Java Source from String, and loads the compiled
- * Bytecode into an {@code InMemoryClassLoader}.
+ * Bytecode into an {@link InMemoryClassLoader}.
  *
  * @see InMemoryClassLoader
  */
@@ -54,17 +54,17 @@ public class InMemoryCompiler {
   private final Map<String,JavaFileObject> classNameToSource = new HashMap<>();
 
   /**
-   * Compile the sources that have been added to this {@code InMemoryCompiler},
+   * Compile the sources that have been added to this {@link InMemoryCompiler},
    * and, if compilation is successful, write compiled classes to the specified
    * destination directory.
    *
-   * @param classLoader The {@code ClassLoader} for resolution of linked
+   * @param classLoader The {@link ClassLoader} for resolution of linked
    *          classes.
    * @param classpath Compiler classpath, or {@code null} for no classpath.
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
    * @param options Compiler options.
-   * @return A {@code ClassLoader} which contains the compiled and loaded
+   * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
@@ -75,13 +75,13 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@code InMemoryCompiler}.
+   * Compile the sources that have been added to this {@link InMemoryCompiler}.
    *
-   * @param classLoader The {@code ClassLoader} for resolution of linked
+   * @param classLoader The {@link ClassLoader} for resolution of linked
    *          classes.
    * @param classpath Compiler classpath, or {@code null} for no classpath.
    * @param options Compiler options.
-   * @return A {@code ClassLoader} which contains the compiled and loaded
+   * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
@@ -92,7 +92,7 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@code InMemoryCompiler},
+   * Compile the sources that have been added to this {@link InMemoryCompiler},
    * and, if compilation is successful, write compiled classes to the specified
    * destination directory. This method is equivalent to calling:
    * <p>
@@ -104,7 +104,7 @@ public class InMemoryCompiler {
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
    * @param options Compiler options.
-   * @return A {@code ClassLoader} which contains the compiled and loaded
+   * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
@@ -114,7 +114,7 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@code InMemoryCompiler}.
+   * Compile the sources that have been added to this {@link InMemoryCompiler}.
    * This method is equivalent to calling:
    * <p>
    * <blockquote>
@@ -123,7 +123,7 @@ public class InMemoryCompiler {
    *
    * @param classpath Compiler classpath, or {@code null} for no classpath.
    * @param options Compiler options.
-   * @return A {@code ClassLoader} which contains the compiled and loaded
+   * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
@@ -134,7 +134,7 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@code InMemoryCompiler},
+   * Compile the sources that have been added to this {@link InMemoryCompiler},
    * and, if compilation is successful, write compiled classes to the specified
    * destination directory. This method is equivalent to calling:
    * <p>
@@ -142,12 +142,12 @@ public class InMemoryCompiler {
    * {@code compile(ClassLoader.getSystemClassLoader(), null, destDir, options)}
    * </blockquote>
    *
-   * @param classLoader The {@code ClassLoader} for resolution of linked
+   * @param classLoader The {@link ClassLoader} for resolution of linked
    *          classes.
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
    * @param options Compiler options.
-   * @return A {@code ClassLoader} which contains the compiled and loaded
+   * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
@@ -157,17 +157,17 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@code InMemoryCompiler}.
+   * Compile the sources that have been added to this {@link InMemoryCompiler}.
    * This method is equivalent to calling:
    * <p>
    * <blockquote>
    * {@code compile(ClassLoader.getSystemClassLoader(), null, options)}
    * </blockquote>
    *
-   * @param classLoader The {@code ClassLoader} for resolution of linked
+   * @param classLoader The {@link ClassLoader} for resolution of linked
    *          classes.
    * @param options Compiler options.
-   * @return A {@code ClassLoader} which contains the compiled and loaded
+   * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
@@ -178,7 +178,7 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@code InMemoryCompiler},
+   * Compile the sources that have been added to this {@link InMemoryCompiler},
    * and, if compilation is successful, write compiled classes to the specified
    * destination directory. This method is equivalent to calling:
    * <p>
@@ -189,7 +189,7 @@ public class InMemoryCompiler {
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
    * @param options Compiler options.
-   * @return A {@code ClassLoader} which contains the compiled and loaded
+   * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
@@ -199,7 +199,7 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@code InMemoryCompiler}.
+   * Compile the sources that have been added to this {@link InMemoryCompiler}.
    * This method is equivalent to calling:
    * <p>
    * <blockquote>
@@ -207,7 +207,7 @@ public class InMemoryCompiler {
    * </blockquote>
    *
    * @param options Compiler options.
-   * @return A {@code ClassLoader} which contains the compiled and loaded
+   * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
    * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.

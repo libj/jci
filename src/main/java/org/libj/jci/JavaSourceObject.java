@@ -22,14 +22,14 @@ import java.net.URI;
 import javax.tools.SimpleJavaFileObject;
 
 /**
- * A {@code SimpleJavaFileObject} representing Java Source (i.e. a ".java"
+ * A {@link SimpleJavaFileObject} representing Java Source (i.e. a ".java"
  * file).
  */
 class JavaSourceObject extends SimpleJavaFileObject {
   private final String source;
 
   /**
-   * Creates a new {@code JavaSourceObject} with the specified name and source.
+   * Creates a new {@link JavaSourceObject} with the specified name and source.
    *
    * @param name The name.
    * @param source The source.
@@ -40,9 +40,9 @@ class JavaSourceObject extends SimpleJavaFileObject {
   }
 
   /**
-   * Returns the source for this {@code JavaSourceObject}.
+   * Returns the source for this {@link JavaSourceObject}.
    *
-   * @return The source for this {@code JavaSourceObject}.
+   * @return The source for this {@link JavaSourceObject}.
    */
   @Override
   public CharSequence getCharContent(final boolean ignoreEncodingErrors) throws IOException {

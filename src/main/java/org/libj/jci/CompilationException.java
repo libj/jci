@@ -48,7 +48,7 @@ public class CompilationException extends Exception {
   private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
 
   /**
-   * Constructs a new {@code CompilationException} with the specified detail
+   * Constructs a new {@link CompilationException} with the specified detail
    * message.
    *
    * @param message The detail message.
@@ -58,7 +58,7 @@ public class CompilationException extends Exception {
   }
 
   /**
-   * Constructs a new {@code CompilationException} with the specified cause.
+   * Constructs a new {@link CompilationException} with the specified cause.
    *
    * @param cause The cause.
    */
@@ -67,7 +67,7 @@ public class CompilationException extends Exception {
   }
 
   /**
-   * Constructs a new {@code CompilationException} with the specified detail
+   * Constructs a new {@link CompilationException} with the specified detail
    * message and cause.
    *
    * @param message The detail message.
@@ -79,7 +79,7 @@ public class CompilationException extends Exception {
   }
 
   /**
-   * Constructs a new {@code CompilationException} with the specified list of
+   * Constructs a new {@link CompilationException} with the specified list of
    * {@link Diagnostic} objects.
    *
    * @param diagnostics The list of {@link Diagnostic} objects.
@@ -89,7 +89,7 @@ public class CompilationException extends Exception {
   }
 
   /**
-   * Constructs a new {@code CompilationException} with the specified list of
+   * Constructs a new {@link CompilationException} with the specified list of
    * {@link Diagnostic} objects and cause.
    *
    * @param diagnostics The list of {@link Diagnostic} objects.
@@ -101,6 +101,9 @@ public class CompilationException extends Exception {
   }
 
   /**
+   * Returns the list of {@link Diagnostic} objects. If no diagnostics were
+   * provided, this method returns an empty list.
+   *
    * @return The list of {@link Diagnostic} objects. If no diagnostics were
    *         provided, this method returns an empty list.
    */

@@ -23,14 +23,14 @@ import java.net.URI;
 import javax.tools.SimpleJavaFileObject;
 
 /**
- * A {@code SimpleJavaFileObject} representing Java Bytecode (i.e. a ".class"
+ * A {@link SimpleJavaFileObject} representing Java Bytecode (i.e. a ".class"
  * file).
  */
 class JavaByteCodeObject extends SimpleJavaFileObject {
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
   /**
-   * Creates a new {@code JavaByteCodeObject} with the specified name.
+   * Creates a new {@link JavaByteCodeObject} with the specified name.
    *
    * @param name The name.
    */
@@ -39,9 +39,9 @@ class JavaByteCodeObject extends SimpleJavaFileObject {
   }
 
   /**
-   * Returns the bytecode as an {@code OutputStream}.
+   * Returns the bytecode as an {@link OutputStream}.
    *
-   * @return The bytecode as an {@code OutputStream}.
+   * @return The bytecode as an {@link OutputStream}.
    */
   @Override
   public OutputStream openOutputStream() {
@@ -49,6 +49,8 @@ class JavaByteCodeObject extends SimpleJavaFileObject {
   }
 
   /**
+   * Returns the bytecode as a byte array.
+   *
    * @return The bytecode as a byte array.
    */
   public byte[] getBytes() {

@@ -45,7 +45,7 @@ import org.libj.util.Classes;
 import org.libj.util.Enumerations;
 
 /**
- * A {@code ClassLoader} that compiles sources specified in the constructor in
+ * A {@link ClassLoader} that compiles sources specified in the constructor in
  * memory, and optionally writes the compiled classes to a destination
  * directory.
  *
@@ -60,12 +60,12 @@ class InMemoryClassLoader extends ClassLoader {
   private final URL url;
 
   /**
-   * Creates a new {@code InMemoryClassLoader} with the specified sources and
+   * Creates a new {@link InMemoryClassLoader} with the specified sources and
    * destination directory.
    *
-   * @param parent The parent {@code ClassLoader}.
-   * @param classNameToSource The map of class name {@code String} to source
-   *          {@code JavaFileObject} object.
+   * @param parent The parent {@link ClassLoader}.
+   * @param classNameToSource The map of class name {@link String} to source
+   *          {@link JavaFileObject} object.
    * @param options Compiler options, or {@code null} for no options.
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
