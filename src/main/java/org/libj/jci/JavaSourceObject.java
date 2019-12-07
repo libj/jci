@@ -40,10 +40,10 @@ class JavaSourceObject extends SimpleJavaFileObject {
   }
 
   /**
-   * Returns the source for this {@link JavaSourceObject}.
+   * Returns the {@link CharSequence}.
    *
    * @param ignoreEncodingErrors Whether to ignore encoding errors.
-   * @return The source for this {@link JavaSourceObject}.
+   * @return The {@link CharSequence}.
    */
   @Override
   public CharSequence getCharContent(final boolean ignoreEncodingErrors) throws IOException {
