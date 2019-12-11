@@ -95,10 +95,10 @@ public class InMemoryCompiler {
    * Compile the sources that have been added to this {@link InMemoryCompiler},
    * and, if compilation is successful, write compiled classes to the specified
    * destination directory. This method is equivalent to calling:
-   * <p>
-   * <blockquote>
+   *
+   * <pre>
    * {@code compile(ClassLoader.getSystemClassLoader(), classpath, destDir, options)}
-   * </blockquote>
+   * </pre>
    *
    * @param classpath Compiler classpath, or {@code null} for no classpath.
    * @param destDir The destination directory of the compiled classes, or
@@ -116,10 +116,10 @@ public class InMemoryCompiler {
   /**
    * Compile the sources that have been added to this {@link InMemoryCompiler}.
    * This method is equivalent to calling:
-   * <p>
-   * <blockquote>
+   *
+   * <pre>
    * {@code compile(ClassLoader.getSystemClassLoader(), classpath, options)}
-   * </blockquote>
+   * </pre>
    *
    * @param classpath Compiler classpath, or {@code null} for no classpath.
    * @param options Compiler options.
@@ -137,10 +137,10 @@ public class InMemoryCompiler {
    * Compile the sources that have been added to this {@link InMemoryCompiler},
    * and, if compilation is successful, write compiled classes to the specified
    * destination directory. This method is equivalent to calling:
-   * <p>
-   * <blockquote>
+   *
+   * <pre>
    * {@code compile(ClassLoader.getSystemClassLoader(), null, destDir, options)}
-   * </blockquote>
+   * </pre>
    *
    * @param classLoader The {@link ClassLoader} for resolution of linked
    *          classes.
@@ -159,10 +159,10 @@ public class InMemoryCompiler {
   /**
    * Compile the sources that have been added to this {@link InMemoryCompiler}.
    * This method is equivalent to calling:
-   * <p>
-   * <blockquote>
+   *
+   * <pre>
    * {@code compile(ClassLoader.getSystemClassLoader(), null, options)}
-   * </blockquote>
+   * </pre>
    *
    * @param classLoader The {@link ClassLoader} for resolution of linked
    *          classes.
@@ -181,10 +181,10 @@ public class InMemoryCompiler {
    * Compile the sources that have been added to this {@link InMemoryCompiler},
    * and, if compilation is successful, write compiled classes to the specified
    * destination directory. This method is equivalent to calling:
-   * <p>
-   * <blockquote>
+   *
+   * <pre>
    * {@code compile(ClassLoader.getSystemClassLoader(), null, destDir, options)}
-   * </blockquote>
+   * </pre>
    *
    * @param destDir The destination directory of the compiled classes, or
    *          {@code null} if the classes should not be written.
@@ -201,10 +201,10 @@ public class InMemoryCompiler {
   /**
    * Compile the sources that have been added to this {@link InMemoryCompiler}.
    * This method is equivalent to calling:
-   * <p>
-   * <blockquote>
+   *
+   * <pre>
    * {@code compile(ClassLoader.getSystemClassLoader(), null, options)}
-   * </blockquote>
+   * </pre>
    *
    * @param options Compiler options.
    * @return A {@link ClassLoader} which contains the compiled and loaded
