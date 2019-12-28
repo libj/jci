@@ -42,7 +42,7 @@ import org.openjax.cdm.lexer.Lexer.Token;
  * @see InMemoryClassLoader
  */
 public class InMemoryCompiler {
-  private static ClassLoader digestOptions(final ClassLoader classLoader, final List<String> options, final List<File> classpath) {
+  private static ClassLoader digestOptions(final ClassLoader classLoader, final List<? super String> options, final List<? extends File> classpath) {
     if (classpath == null)
       return classLoader;
 
@@ -69,7 +69,7 @@ public class InMemoryCompiler {
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final ClassLoader classLoader, final List<File> classpath, final File destDir, final String ... options) throws CompilationException, IOException {
+  public ClassLoader compile(final ClassLoader classLoader, final List<? extends File> classpath, final File destDir, final String ... options) throws CompilationException, IOException {
     final List<String> optionsList = options != null && options.length > 0 ? CollectionUtil.asCollection(new ArrayList<>(), options) : new ArrayList<>();
     return new InMemoryClassLoader(digestOptions(classLoader, optionsList, classpath), classNameToSource, optionsList, destDir);
   }
@@ -83,11 +83,10 @@ public class InMemoryCompiler {
    * @param options Compiler options.
    * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
-   * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final ClassLoader classLoader, final List<File> classpath, final String ... options) throws ClassNotFoundException, CompilationException, IOException {
+  public ClassLoader compile(final ClassLoader classLoader, final List<? extends File> classpath, final String ... options) throws CompilationException, IOException {
     return compile(classLoader, classpath, null, options);
   }
 
@@ -109,7 +108,7 @@ public class InMemoryCompiler {
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final List<File> classpath, final File destDir, final String ... options) throws CompilationException, IOException {
+  public ClassLoader compile(final List<? extends File> classpath, final File destDir, final String ... options) throws CompilationException, IOException {
     return compile(ClassLoader.getSystemClassLoader(), classpath, destDir, options);
   }
 
@@ -125,11 +124,10 @@ public class InMemoryCompiler {
    * @param options Compiler options.
    * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
-   * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final List<File> classpath, final String ... options) throws ClassNotFoundException, CompilationException, IOException {
+  public ClassLoader compile(final List<? extends File> classpath, final String ... options) throws CompilationException, IOException {
     return compile(ClassLoader.getSystemClassLoader(), classpath, null, options);
   }
 
@@ -169,11 +167,10 @@ public class InMemoryCompiler {
    * @param options Compiler options.
    * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
-   * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final ClassLoader classLoader, final String ... options) throws ClassNotFoundException, CompilationException, IOException {
+  public ClassLoader compile(final ClassLoader classLoader, final String ... options) throws CompilationException, IOException {
     return compile(classLoader, null, null, options);
   }
 
@@ -209,11 +206,10 @@ public class InMemoryCompiler {
    * @param options Compiler options.
    * @return A {@link ClassLoader} which contains the compiled and loaded
    *         classes.
-   * @throws ClassNotFoundException If a class cannot be found.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
-  public ClassLoader compile(final String ... options) throws ClassNotFoundException, CompilationException, IOException {
+  public ClassLoader compile(final String ... options) throws CompilationException, IOException {
     return compile(ClassLoader.getSystemClassLoader(), null, null, options);
   }
 
@@ -255,7 +251,7 @@ public class InMemoryCompiler {
                 this.start = start;
             }
             else if (this.start != -2 && token == Lexer.Span.WHITESPACE) {
-              className.append(source.substring(this.start, start));
+              className.append(source, this.start, start);
               final String string = className.toString();
               InMemoryCompiler.this.classNameToSource.put(string, new JavaSourceObject(string, source));
               success[0] = true;

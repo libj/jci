@@ -16,7 +16,6 @@
 
 package org.libj.jci;
 
-import java.io.IOException;
 import java.net.URI;
 
 import javax.tools.SimpleJavaFileObject;
@@ -46,7 +45,7 @@ class JavaSourceObject extends SimpleJavaFileObject {
    * @return The {@link CharSequence}.
    */
   @Override
-  public CharSequence getCharContent(final boolean ignoreEncodingErrors) throws IOException {
+  public CharSequence getCharContent(final boolean ignoreEncodingErrors) {
     return source;
   }
 }

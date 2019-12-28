@@ -19,6 +19,7 @@ package org.libj.jci;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -51,7 +52,7 @@ import org.libj.util.Enumerations;
  *
  * @see InMemoryCompiler
  */
-class InMemoryClassLoader extends ClassLoader {
+class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
   private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
   private final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
   private final Map<String,JavaByteCodeObject> classNameToByteCode = new HashMap<>();
@@ -88,7 +89,7 @@ class InMemoryClassLoader extends ClassLoader {
        * Overloaded to force resource resolution to this InMemoryClassLoader.
        */
       @Override
-      public Enumeration<URL> getResources(final String name) throws IOException {
+      public Enumeration<URL> getResources(final String name) {
         return null;
       }
 
@@ -104,7 +105,7 @@ class InMemoryClassLoader extends ClassLoader {
 
     try (final JavaFileManager fileManager = new ForwardingJavaFileManager<JavaFileManager>(compiler.getStandardFileManager(diagnostics, null, null)) {
       @Override
-      public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) throws IOException {
+      public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) {
         JavaByteCodeObject javaByteCodeObject = classNameToByteCode.get(className);
         if (javaByteCodeObject == null)
           classNameToByteCode.put(className, javaByteCodeObject = new JavaByteCodeObject(className));
@@ -179,7 +180,15 @@ class InMemoryClassLoader extends ClassLoader {
   }
 
   @Override
-  protected Enumeration<URL> findResources(final String name) throws IOException {
+  protected Enumeration<URL> findResources(final String name) throws MalformedURLException {
     return resources.contains(name) ? Enumerations.singleton(new URL(url, name)) : Collections.emptyEnumeration();
+  }
+
+  @Override
+  public void close() throws Exception {
+    for (final JavaByteCodeObject javaByteCodeObject : classNameToByteCode.values())
+      javaByteCodeObject.close();
+
+    classNameToByteCode.clear();
   }
 }

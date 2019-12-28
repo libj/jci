@@ -26,8 +26,14 @@ import javax.tools.SimpleJavaFileObject;
  * A {@link SimpleJavaFileObject} representing Java Bytecode (i.e. a ".class"
  * file).
  */
-class JavaByteCodeObject extends SimpleJavaFileObject {
-  private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+class JavaByteCodeObject extends SimpleJavaFileObject implements AutoCloseable {
+  private static class ReleasableByteArrayOutputStream extends ByteArrayOutputStream {
+    private void release() {
+      this.buf = null;
+    }
+  }
+
+  private final ReleasableByteArrayOutputStream baos = new ReleasableByteArrayOutputStream();
 
   /**
    * Creates a new {@link JavaByteCodeObject} with the specified name.
@@ -55,5 +61,10 @@ class JavaByteCodeObject extends SimpleJavaFileObject {
    */
   public byte[] getBytes() {
     return baos.toByteArray();
+  }
+
+  @Override
+  public void close() {
+    baos.release();
   }
 }
