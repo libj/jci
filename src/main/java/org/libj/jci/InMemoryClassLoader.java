@@ -185,7 +185,7 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
   }
 
   @Override
-  public void close() throws Exception {
+  public void close() {
     for (final JavaByteCodeObject javaByteCodeObject : classNameToByteCode.values())
       javaByteCodeObject.close();
 
