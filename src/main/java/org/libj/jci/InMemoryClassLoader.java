@@ -40,9 +40,9 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
+import org.libj.lang.Classes;
 import org.libj.net.MemoryURLStreamHandler;
 import org.libj.net.URLs;
-import org.libj.util.Classes;
 import org.libj.util.Enumerations;
 
 /**
