@@ -1,6 +1,8 @@
 # Changes by Version
 
-## [v0.8.5](https://github.com/libj/jci/compare/34a69591249e8e791180af1ce6fe48ddb65b55c3..HEAD) (2020-05-23)
+## [v0.8.6-SNAPSHOT](https://github.com/libj/jci/compare/fb87770e74ada8d6593ad634c45c1d8e2a5bab11..HEAD)
+
+## [v0.8.5](https://github.com/libj/jci/compare/34a69591249e8e791180af1ce6fe48ddb65b55c3..fb87770e74ada8d6593ad634c45c1d8e2a5bab11) (2020-05-23)
 * Make `InMemoryClassLoader` `AutoCloseable`.
 * Add `ReleasableByteArrayOutputStream` to `JavaByteCodeObject`.
 * Improve javadocs.
