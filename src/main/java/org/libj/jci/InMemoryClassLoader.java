@@ -41,9 +41,9 @@ import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
 import org.libj.lang.Classes;
+import org.libj.lang.Enumerations;
 import org.libj.net.MemoryURLStreamHandler;
 import org.libj.net.URLs;
-import org.libj.util.Enumerations;
 
 /**
  * A {@link ClassLoader} that compiles sources specified in the constructor in
