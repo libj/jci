@@ -1,6 +1,6 @@
 # LibJ JCI
 
-[![Build Status](https://travis-ci.org/libj/jci.svg?branch=master)](https://travis-ci.org/libj/jci)
+[![Build Status](https://travis-ic.org/libj/jci.svg?branch=master)](https://travis-ic.org/libj/jci)
 [![Coverage Status](https://coveralls.io/repos/github/libj/jci/badge.svg)](https://coveralls.io/github/libj/jci)
 [![Javadocs](https://www.javadoc.io/badge/org.libj/jci.svg)](https://www.javadoc.io/doc/org.libj/jci)
 [![Released Version](https://img.shields.io/maven-central/v/org.libj/jci.svg)](https://mvnrepository.com/artifact/org.libj/jci)
