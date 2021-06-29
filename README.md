@@ -1,6 +1,6 @@
 # LibJ JCI
 
-[![Build Status](https://github.com/libj/jci/workflows/build.yml/badge.svg)](https://github.com/libj/jci/actions/workflows/build.yml)
+[![Build Status](https://github.com/libj/jci/actions/workflows/build.yml/badge.svg)](https://github.com/libj/jci/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/libj/jci/badge.svg)](https://coveralls.io/github/libj/jci)
 [![Javadocs](https://www.javadoc.io/badge/org.libj/jci.svg)](https://www.javadoc.io/doc/org.libj/jci)
 [![Released Version](https://img.shields.io/maven-central/v/org.libj/jci.svg)](https://mvnrepository.com/artifact/org.libj/jci)
