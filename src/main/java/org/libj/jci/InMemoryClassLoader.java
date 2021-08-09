@@ -40,6 +40,7 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
+import org.libj.lang.Assertions;
 import org.libj.lang.Classes;
 import org.libj.lang.Enumerations;
 import org.libj.net.MemoryURLStreamHandler;
@@ -73,7 +74,7 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
    * @throws CompilationException If an error has occurred while compiling the
    *           specified sources.
    * @throws IOException If an I/O error has occurred.
-   * @throws NullPointerException If {@code classNameToSource} is null.
+   * @throws IllegalArgumentException If {@code classNameToSource} is null.
    */
   InMemoryClassLoader(final ClassLoader parent, final Map<String,JavaFileObject> classNameToSource, final Iterable<String> options, final File destDir) throws CompilationException, IOException {
     super(new ClassLoader(parent) {
@@ -103,6 +104,7 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
       }
     });
 
+    Assertions.assertNotNull(classNameToSource);
     try (final JavaFileManager fileManager = new ForwardingJavaFileManager<JavaFileManager>(compiler.getStandardFileManager(diagnostics, null, null)) {
       @Override
       public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) {
