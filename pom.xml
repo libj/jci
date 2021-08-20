@@ -32,14 +32,14 @@
   </description>
   <dependencies>
     <dependency>
-      <groupId>org.openjax</groupId>
-      <artifactId>cdm</artifactId>
-      <version>0.0.10-SNAPSHOT</version>
-    </dependency>
-    <dependency>
       <groupId>org.libj</groupId>
       <artifactId>net</artifactId>
       <version>0.5.3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjax</groupId>
+      <artifactId>cdm</artifactId>
+      <version>0.0.10-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
