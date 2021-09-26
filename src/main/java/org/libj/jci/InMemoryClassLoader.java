@@ -16,6 +16,8 @@
 
 package org.libj.jci;
 
+import static org.libj.lang.Assertions.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +42,6 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
-import org.libj.lang.Assertions;
 import org.libj.lang.Classes;
 import org.libj.lang.Enumerations;
 import org.libj.net.MemoryURLStreamHandler;
@@ -104,7 +105,7 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
       }
     });
 
-    Assertions.assertNotNull(classNameToSource);
+    assertNotNull(classNameToSource);
     try (final JavaFileManager fileManager = new ForwardingJavaFileManager<JavaFileManager>(compiler.getStandardFileManager(diagnostics, null, null)) {
       @Override
       public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) {
