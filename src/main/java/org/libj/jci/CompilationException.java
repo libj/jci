@@ -27,8 +27,6 @@ import javax.tools.JavaFileObject;
  * An exception that signals an error during compilation of sources.
  */
 public class CompilationException extends Exception {
-  private static final long serialVersionUID = -7384036082398812166L;
-
   private static String buildMessage(final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
     if (diagnostics == null || diagnostics.size() == 0)
       return null;
