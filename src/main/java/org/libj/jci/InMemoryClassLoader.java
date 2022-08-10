@@ -48,9 +48,8 @@ import org.libj.net.MemoryURLStreamHandler;
 import org.libj.net.URLs;
 
 /**
- * A {@link ClassLoader} that compiles sources specified in the constructor in
- * memory, and optionally writes the compiled classes to a destination
- * directory.
+ * A {@link ClassLoader} that compiles sources specified in the constructor in memory, and optionally writes the compiled classes to
+ * a destination directory.
  *
  * @see InMemoryCompiler
  */
@@ -63,17 +62,13 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
   private final URL url;
 
   /**
-   * Creates a new {@link InMemoryClassLoader} with the specified sources and
-   * destination directory.
+   * Creates a new {@link InMemoryClassLoader} with the specified sources and destination directory.
    *
    * @param parent The parent {@link ClassLoader}.
-   * @param classNameToSource The map of class name {@link String} to source
-   *          {@link JavaFileObject} object.
+   * @param classNameToSource The map of class name {@link String} to source {@link JavaFileObject} object.
    * @param options Compiler options, or {@code null} for no options.
-   * @param destDir The destination directory of the compiled classes, or
-   *          {@code null} if the classes should not be written.
-   * @throws CompilationException If an error has occurred while compiling the
-   *           specified sources.
+   * @param destDir The destination directory of the compiled classes, or {@code null} if the classes should not be written.
+   * @throws CompilationException If an error has occurred while compiling the specified sources.
    * @throws IOException If an I/O error has occurred.
    * @throws IllegalArgumentException If {@code classNameToSource} is null.
    */
@@ -96,8 +91,7 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
       }
 
       /**
-       * Overloaded to force loading of classes defined in this
-       * InMemoryClassLoader, by this InMemoryClassLoader.
+       * Overloaded to force loading of classes defined in this InMemoryClassLoader, by this InMemoryClassLoader.
        */
       @Override
       protected Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException {
@@ -122,7 +116,7 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
 
     try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
       try (final JarOutputStream jos = new JarOutputStream(baos)) {
-        for (final Map.Entry<String,JavaByteCodeObject> entry : classNameToByteCode.entrySet()) {
+        for (final Map.Entry<String,JavaByteCodeObject> entry : classNameToByteCode.entrySet()) { // [S]
           if (!entry.getKey().endsWith("package-info"))
             loadClass(entry.getKey());
 
@@ -189,7 +183,7 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
 
   @Override
   public void close() {
-    for (final JavaByteCodeObject javaByteCodeObject : classNameToByteCode.values())
+    for (final JavaByteCodeObject javaByteCodeObject : classNameToByteCode.values()) // [C]
       javaByteCodeObject.close();
 
     classNameToByteCode.clear();

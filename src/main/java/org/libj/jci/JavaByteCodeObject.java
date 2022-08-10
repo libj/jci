@@ -23,8 +23,7 @@ import java.net.URI;
 import javax.tools.SimpleJavaFileObject;
 
 /**
- * A {@link SimpleJavaFileObject} representing Java Bytecode (i.e. a ".class"
- * file).
+ * A {@link SimpleJavaFileObject} representing Java Bytecode (i.e. a ".class" file).
  */
 class JavaByteCodeObject extends SimpleJavaFileObject implements AutoCloseable {
   private static class ReleasableByteArrayOutputStream extends ByteArrayOutputStream {

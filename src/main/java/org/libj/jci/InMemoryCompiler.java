@@ -36,8 +36,7 @@ import org.openjax.cdm.lexer.Lexer;
 import org.openjax.cdm.lexer.Lexer.Token;
 
 /**
- * A Java compiler that compiles Java Source from String, and loads the compiled
- * Bytecode into an {@link InMemoryClassLoader}.
+ * A Java compiler that compiles Java Source from String, and loads the compiled Bytecode into an {@link InMemoryClassLoader}.
  *
  * @see InMemoryClassLoader
  */
@@ -54,18 +53,14 @@ public class InMemoryCompiler {
   private final Map<String,JavaFileObject> classNameToSource = new HashMap<>();
 
   /**
-   * Compile the sources that have been added to this {@link InMemoryCompiler},
-   * and, if compilation is successful, write compiled classes to the specified
-   * destination directory.
+   * Compile the sources that have been added to this {@link InMemoryCompiler}, and, if compilation is successful, write compiled
+   * classes to the specified destination directory.
    *
-   * @param classLoader The {@link ClassLoader} for resolution of linked
-   *          classes.
+   * @param classLoader The {@link ClassLoader} for resolution of linked classes.
    * @param classpath Compiler classpath, or {@code null} for no classpath.
-   * @param destDir The destination directory of the compiled classes, or
-   *          {@code null} if the classes should not be written.
+   * @param destDir The destination directory of the compiled classes, or {@code null} if the classes should not be written.
    * @param options Compiler options.
-   * @return A {@link ClassLoader} which contains the compiled and loaded
-   *         classes.
+   * @return A {@link ClassLoader} which contains the compiled and loaded classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
@@ -77,12 +72,10 @@ public class InMemoryCompiler {
   /**
    * Compile the sources that have been added to this {@link InMemoryCompiler}.
    *
-   * @param classLoader The {@link ClassLoader} for resolution of linked
-   *          classes.
+   * @param classLoader The {@link ClassLoader} for resolution of linked classes.
    * @param classpath Compiler classpath, or {@code null} for no classpath.
    * @param options Compiler options.
-   * @return A {@link ClassLoader} which contains the compiled and loaded
-   *         classes.
+   * @return A {@link ClassLoader} which contains the compiled and loaded classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
@@ -91,20 +84,19 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@link InMemoryCompiler},
-   * and, if compilation is successful, write compiled classes to the specified
-   * destination directory. This method is equivalent to calling:
+   * Compile the sources that have been added to this {@link InMemoryCompiler}, and, if compilation is successful, write compiled
+   * classes to the specified destination directory. This method is equivalent to calling:
    *
    * <pre>
-   * {@code compile(ClassLoader.getSystemClassLoader(), classpath, destDir, options)}
+   * {@code
+   * compile(ClassLoader.getSystemClassLoader(), classpath, destDir, options)
+   * }
    * </pre>
    *
    * @param classpath Compiler classpath, or {@code null} for no classpath.
-   * @param destDir The destination directory of the compiled classes, or
-   *          {@code null} if the classes should not be written.
+   * @param destDir The destination directory of the compiled classes, or {@code null} if the classes should not be written.
    * @param options Compiler options.
-   * @return A {@link ClassLoader} which contains the compiled and loaded
-   *         classes.
+   * @return A {@link ClassLoader} which contains the compiled and loaded classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
@@ -113,17 +105,17 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@link InMemoryCompiler}.
-   * This method is equivalent to calling:
+   * Compile the sources that have been added to this {@link InMemoryCompiler}. This method is equivalent to calling:
    *
    * <pre>
-   * {@code compile(ClassLoader.getSystemClassLoader(), classpath, options)}
+   * {@code
+   * compile(ClassLoader.getSystemClassLoader(), classpath, options)
+   * }
    * </pre>
    *
    * @param classpath Compiler classpath, or {@code null} for no classpath.
    * @param options Compiler options.
-   * @return A {@link ClassLoader} which contains the compiled and loaded
-   *         classes.
+   * @return A {@link ClassLoader} which contains the compiled and loaded classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
@@ -132,21 +124,19 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@link InMemoryCompiler},
-   * and, if compilation is successful, write compiled classes to the specified
-   * destination directory. This method is equivalent to calling:
+   * Compile the sources that have been added to this {@link InMemoryCompiler}, and, if compilation is successful, write compiled
+   * classes to the specified destination directory. This method is equivalent to calling:
    *
    * <pre>
-   * {@code compile(ClassLoader.getSystemClassLoader(), null, destDir, options)}
+   * {@code
+   * compile(ClassLoader.getSystemClassLoader(), null, destDir, options)
+   * }
    * </pre>
    *
-   * @param classLoader The {@link ClassLoader} for resolution of linked
-   *          classes.
-   * @param destDir The destination directory of the compiled classes, or
-   *          {@code null} if the classes should not be written.
+   * @param classLoader The {@link ClassLoader} for resolution of linked classes.
+   * @param destDir The destination directory of the compiled classes, or {@code null} if the classes should not be written.
    * @param options Compiler options.
-   * @return A {@link ClassLoader} which contains the compiled and loaded
-   *         classes.
+   * @return A {@link ClassLoader} which contains the compiled and loaded classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
@@ -155,18 +145,17 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@link InMemoryCompiler}.
-   * This method is equivalent to calling:
+   * Compile the sources that have been added to this {@link InMemoryCompiler}. This method is equivalent to calling:
    *
    * <pre>
-   * {@code compile(ClassLoader.getSystemClassLoader(), null, options)}
+   * {@code
+   * compile(ClassLoader.getSystemClassLoader(), null, options)
+   * }
    * </pre>
    *
-   * @param classLoader The {@link ClassLoader} for resolution of linked
-   *          classes.
+   * @param classLoader The {@link ClassLoader} for resolution of linked classes.
    * @param options Compiler options.
-   * @return A {@link ClassLoader} which contains the compiled and loaded
-   *         classes.
+   * @return A {@link ClassLoader} which contains the compiled and loaded classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
@@ -175,19 +164,18 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@link InMemoryCompiler},
-   * and, if compilation is successful, write compiled classes to the specified
-   * destination directory. This method is equivalent to calling:
+   * Compile the sources that have been added to this {@link InMemoryCompiler}, and, if compilation is successful, write compiled
+   * classes to the specified destination directory. This method is equivalent to calling:
    *
    * <pre>
-   * {@code compile(ClassLoader.getSystemClassLoader(), null, destDir, options)}
+   * {@code
+   * compile(ClassLoader.getSystemClassLoader(), null, destDir, options)
+   * }
    * </pre>
    *
-   * @param destDir The destination directory of the compiled classes, or
-   *          {@code null} if the classes should not be written.
+   * @param destDir The destination directory of the compiled classes, or {@code null} if the classes should not be written.
    * @param options Compiler options.
-   * @return A {@link ClassLoader} which contains the compiled and loaded
-   *         classes.
+   * @return A {@link ClassLoader} which contains the compiled and loaded classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
@@ -196,16 +184,16 @@ public class InMemoryCompiler {
   }
 
   /**
-   * Compile the sources that have been added to this {@link InMemoryCompiler}.
-   * This method is equivalent to calling:
+   * Compile the sources that have been added to this {@link InMemoryCompiler}. This method is equivalent to calling:
    *
    * <pre>
-   * {@code compile(ClassLoader.getSystemClassLoader(), null, options)}
+   * {@code
+   * compile(ClassLoader.getSystemClassLoader(), null, options)
+   * }
    * </pre>
    *
    * @param options Compiler options.
-   * @return A {@link ClassLoader} which contains the compiled and loaded
-   *         classes.
+   * @return A {@link ClassLoader} which contains the compiled and loaded classes.
    * @throws CompilationException If a compilation exception has occurred.
    * @throws IOException If an I/O error has occurred.
    */
@@ -217,8 +205,7 @@ public class InMemoryCompiler {
    * Adds Java source for compilation.
    *
    * @param source The source to be added.
-   * @throws IllegalArgumentException If the class name could not be determined
-   *           from the {@code source} argument.
+   * @throws IllegalArgumentException If the class name could not be determined from the {@code source} argument.
    */
   public void addSource(final String source) {
     final boolean[] success = new boolean[1];

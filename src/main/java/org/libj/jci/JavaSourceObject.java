@@ -21,8 +21,7 @@ import java.net.URI;
 import javax.tools.SimpleJavaFileObject;
 
 /**
- * A {@link SimpleJavaFileObject} representing Java Source (i.e. a ".java"
- * file).
+ * A {@link SimpleJavaFileObject} representing Java Source (i.e. a ".java" file).
  */
 class JavaSourceObject extends SimpleJavaFileObject {
   private final String source;

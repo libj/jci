@@ -50,16 +50,16 @@ public class InMemoryCompilerTest {
   public void test() throws ClassNotFoundException, CompilationException, IllegalAccessException, InstantiationException, InvocationTargetException, IOException, NoSuchMethodException {
     final InMemoryCompiler compiler = new InMemoryCompiler();
 
-    for (final String pkg : packages)
-      for (final String cls : classes)
+    for (final String pkg : packages) // [A]
+      for (final String cls : classes) // [A]
         compiler.addSource("/* Test class */\n// With a comment\npackage " + pkg + ";\npublic class " + cls + " implements " + ITest.class.getCanonicalName() + "{public void doSomething(){System.out.println(\"Hello world!\");}}");
 
     final ClassLoader classLoader = compiler.compile(compiledClassesDir, "-g");
 
     // loading and using our compiled class
-    for (final String pkg : packages) {
+    for (final String pkg : packages) { // [A]
       assertNotNull(classLoader.getResource(pkg.replace('.', '/')));
-      for (final String cls : classes) {
+      for (final String cls : classes) { // [A]
         final Class<ITest> test = (Class<ITest>)classLoader.loadClass(pkg + "." + cls);
         final ITest iTest = test.getConstructor().newInstance();
         iTest.doSomething();
