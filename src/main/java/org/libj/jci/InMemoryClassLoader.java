@@ -116,33 +116,35 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
 
     try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
       try (final JarOutputStream jos = new JarOutputStream(baos)) {
-        for (final Map.Entry<String,JavaByteCodeObject> entry : classNameToByteCode.entrySet()) { // [S]
-          if (!entry.getKey().endsWith("package-info"))
-            loadClass(entry.getKey());
+        if (classNameToByteCode.size() > 0) {
+          for (final Map.Entry<String,JavaByteCodeObject> entry : classNameToByteCode.entrySet()) { // [S]
+            if (!entry.getKey().endsWith("package-info"))
+              loadClass(entry.getKey());
 
-          final String name = entry.getKey().replace('.', '/').concat(".class");
-          if (destDir != null) {
-            final File file = new File(destDir, name);
-            file.getParentFile().mkdirs();
-            Files.write(file.toPath(), entry.getValue().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-          }
+            final String name = entry.getKey().replace('.', '/').concat(".class");
+            if (destDir != null) {
+              final File file = new File(destDir, name);
+              file.getParentFile().mkdirs();
+              Files.write(file.toPath(), entry.getValue().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            }
 
-          jos.putNextEntry(new JarEntry(name));
-          jos.write(entry.getValue().getBytes());
-          jos.closeEntry();
-          resources.add(name);
+            jos.putNextEntry(new JarEntry(name));
+            jos.write(entry.getValue().getBytes());
+            jos.closeEntry();
+            resources.add(name);
 
-          String pkg = entry.getKey();
-          int dot;
-          while ((dot = pkg.lastIndexOf('.')) != -1) {
-            pkg = pkg.substring(0, dot);
-            final String dir = pkg.replace('.', '/');
-            if (!resources.contains(dir)) {
-              jos.putNextEntry(new JarEntry(dir));
-              resources.add(dir);
+            String pkg = entry.getKey();
+            int dot;
+            while ((dot = pkg.lastIndexOf('.')) != -1) {
+              pkg = pkg.substring(0, dot);
+              final String dir = pkg.replace('.', '/');
+              if (!resources.contains(dir)) {
+                jos.putNextEntry(new JarEntry(dir));
+                resources.add(dir);
 
-              if (getPackage(pkg) == null)
-                definePackage(pkg, null, null, null, null, null, null, null);
+                if (getPackage(pkg) == null)
+                  definePackage(pkg, null, null, null, null, null, null, null);
+              }
             }
           }
         }
@@ -183,6 +185,9 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
 
   @Override
   public void close() {
+    if (classNameToByteCode.size() == 0)
+      return;
+
     for (final JavaByteCodeObject javaByteCodeObject : classNameToByteCode.values()) // [C]
       javaByteCodeObject.close();
 
