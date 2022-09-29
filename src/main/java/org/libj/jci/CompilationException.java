@@ -28,10 +28,11 @@ import javax.tools.JavaFileObject;
  */
 public class CompilationException extends Exception {
   private static String buildMessage(final List<Diagnostic<? extends JavaFileObject>> diagnostics) {
-    if (diagnostics == null || diagnostics.size() == 0)
+    final int size;
+    if (diagnostics == null || (size = diagnostics.size()) == 0)
       return null;
 
-    final StringBuilder builder = new StringBuilder(diagnostics.size() + " Errors\n");
+    final StringBuilder builder = new StringBuilder(size + " Errors\n");
     final Iterator<Diagnostic<? extends JavaFileObject>> iterator = diagnostics.iterator();
     for (int i = 0; iterator.hasNext(); ++i) { // [I]
       if (i > 0)
