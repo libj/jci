@@ -20,7 +20,6 @@ import static org.libj.util.function.Throwing.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ import java.util.Map;
 
 import javax.tools.JavaFileObject;
 
+import org.libj.io.UnsynchronizedStringReader;
 import org.libj.util.CollectionUtil;
 import org.openjax.cdm.lexer.Keyword;
 import org.openjax.cdm.lexer.Lexer;
@@ -210,7 +210,7 @@ public class InMemoryCompiler {
   public void addSource(final String source) {
     final boolean[] success = new boolean[1];
     try {
-      Lexer.tokenize(new StringReader(source), source.length(), new Lexer.Token.Listener() {
+      Lexer.tokenize(new UnsynchronizedStringReader(source), source.length(), new Lexer.Token.Listener() {
         private int inParen = 0;
         private int start = -2;
         private StringBuilder className;
