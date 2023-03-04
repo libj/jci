@@ -16,8 +16,6 @@
 
 package org.libj.jci;
 
-import static org.libj.lang.Assertions.*;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -70,7 +68,7 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
    * @param destDir The destination directory of the compiled classes, or {@code null} if the classes should not be written.
    * @throws CompilationException If an error has occurred while compiling the specified sources.
    * @throws IOException If an I/O error has occurred.
-   * @throws IllegalArgumentException If {@code classNameToSource} is null.
+   * @throws NullPointerException If {@code classNameToSource} is null.
    */
   InMemoryClassLoader(final ClassLoader parent, final Map<String,JavaFileObject> classNameToSource, final Iterable<String> options, final File destDir) throws CompilationException, IOException {
     super(new ClassLoader(parent) {
@@ -99,7 +97,6 @@ class InMemoryClassLoader extends ClassLoader implements AutoCloseable {
       }
     });
 
-    assertNotNull(classNameToSource);
     try (final JavaFileManager fileManager = new ForwardingJavaFileManager<JavaFileManager>(compiler.getStandardFileManager(diagnostics, null, null)) {
       @Override
       public JavaFileObject getJavaFileForOutput(final Location location, final String className, final JavaFileObject.Kind kind, final FileObject sibling) {
