@@ -41,7 +41,7 @@ import org.openjax.cdm.lexer.Lexer.Token;
  * @see InMemoryClassLoader
  */
 public class InMemoryCompiler {
-  private static ClassLoader digestOptions(final ClassLoader classLoader, final List<? super String> options, final List<? extends File> classpath) {
+  private static ClassLoader digestOptions(final ClassLoader classLoader, final List<String> options, final List<? extends File> classpath) {
     if (classpath == null)
       return classLoader;
 
