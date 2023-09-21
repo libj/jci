@@ -22,10 +22,10 @@
   <parent>
     <groupId>org.libj</groupId>
     <artifactId>libj</artifactId>
-    <version>0.9.8</version>
+    <version>0.9.9-SNAPSHOT</version>
   </parent>
   <artifactId>jci</artifactId>
-  <version>0.8.6</version>
+  <version>0.8.7-SNAPSHOT</version>
   <name>LibJ JCI</name>
   <description>
     Java Compiler Interface.
@@ -34,12 +34,12 @@
     <dependency>
       <groupId>org.libj</groupId>
       <artifactId>net</artifactId>
-      <version>0.5.3</version>
+      <version>0.5.4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.openjax</groupId>
       <artifactId>cdm</artifactId>
-      <version>0.0.10</version>
+      <version>0.0.11-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
