@@ -1,6 +1,9 @@
 # Changes by Version
 
-## [v0.8.7-SNAPSHOT](https://github.com/libj/util/compare/508b520af6142c3352b31dc785edefea9219f3c9..HEAD)
+## [v0.8.8-SNAPSHOT](https://github.com/libj/util/compare/e69a5c9ff65c5cc388d79f945d658fbdcea2eb2e..HEAD)
+
+## [v0.8.7](https://github.com/libj/util/compare/508b520af6142c3352b31dc785edefea9219f3c9..e69a5c9ff65c5cc388d79f945d658fbdcea2eb2e) (2024-02-27)
+* #2 Apply auto-formatting
 
 ## [v0.8.6](https://github.com/libj/jci/compare/fb87770e74ada8d6593ad634c45c1d8e2a5bab11..508b520af6142c3352b31dc785edefea9219f3c9) (2023-09-20)
 * #1 Transition to GitHub Actions
