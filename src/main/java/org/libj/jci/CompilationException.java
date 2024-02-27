@@ -32,16 +32,16 @@ public class CompilationException extends Exception {
     if (diagnostics == null || (size = diagnostics.size()) == 0)
       return null;
 
-    final StringBuilder builder = new StringBuilder(size + " Errors\n");
+    final StringBuilder b = new StringBuilder(size + " Errors\n");
     final Iterator<Diagnostic<? extends JavaFileObject>> iterator = diagnostics.iterator();
     for (int i = 0; iterator.hasNext(); ++i) { // [I]
       if (i > 0)
-        builder.append('\n');
+        b.append('\n');
 
-      builder.append(iterator.next());
+      b.append(iterator.next());
     }
 
-    return builder.toString();
+    return b.toString();
   }
 
   private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
